@@ -1,0 +1,164 @@
+.projects-section {
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+  color: #fff;
+  /* box-sizing: border-box;
+  background-color: #1e1e2f; */
+  /* border-radius: 8px; */
+  /* box-shadow: 0 0 15px rgba(120, 141, 255, 0.7); */
+}
+
+.projects-header {
+  position: relative;
+  font-weight: 900;
+  font-size: clamp(1.2rem, 4vw, 2.5rem); /* smaller font size */
+  font-style: italic; /* make text italic */
+  text-transform: uppercase;
+  letter-spacing: 0.08em; /* slightly tighter */
+  text-align: center;
+
+  /* Transparent text to reveal shine layers */
+  color: transparent;
+  background: linear-gradient(
+    120deg,
+    #ffffff 20%,
+    #c4e0ff 40%,
+    #f97316 60%,
+    #ec4899 80%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  /* Glass-like inner glow */
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4), 0 2px 4px rgba(0, 0, 0, 0.4),
+    0 0 12px rgba(255, 255, 255, 0.25);
+
+  /* Slow gradient motion for crystalline sparkle */
+  background-size: 200% 200%;
+  animation: crystalGlow 8s ease-in-out infinite;
+}
+
+@keyframes crystalGlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Optional: sweeping shine highlight */
+.projects-header::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.7) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  animation: shine 4s infinite;
+}
+
+@keyframes shine {
+  0% {
+    left: -75%;
+  }
+  100% {
+    left: 125%;
+  }
+}
+
+.projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.project-item {
+  /* background-color: #292a3a; */
+  padding: 1.6rem 1.8rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgba(120, 141, 255, 0.4);
+  transition: transform 0.3s ease;
+}
+
+.project-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(120, 141, 255, 0.7);
+}
+
+.project-name {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #58a6ff;
+  margin-bottom: 0.3rem;
+}
+
+.project-duration {
+  display: block;
+  font-weight: 600;
+  color: #b6b5b5;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.project-description {
+  font-size: 0.9rem;
+  color: #ccc;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.project-skills {
+  font-size: 0.85rem;
+  color: #91c4ff;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .projects-section {
+    padding: 0 0.8rem;
+  }
+
+  .project-item {
+    padding: 1.2rem 1rem;
+  }
+
+  .project-name {
+    font-size: 1.15rem;
+  }
+
+  .project-duration,
+  .project-skills {
+    font-size: 0.8rem;
+  }
+
+  .project-description {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .projects-section {
+    margin: 2rem 1rem;
+  }
+
+  .project-name {
+    font-size: 1.1rem;
+  }
+
+  .project-description {
+    font-size: 0.8rem;
+  }
+}

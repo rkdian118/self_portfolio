@@ -1,0 +1,131 @@
+.technologies-section {
+  text-align: center;
+  margin: 1rem;
+  padding: 0 5vw; /* responsive horizontal padding */
+}
+
+.tech-header {
+  position: relative;
+  font-weight: 900;
+  font-size: clamp(1.2rem, 4vw, 2.5rem); /* smaller font size */
+  font-style: italic; /* make text italic */
+  text-transform: uppercase;
+  letter-spacing: 0.08em; /* slightly tighter */
+  text-align: center;
+
+  /* Transparent text to reveal shine layers */
+  color: transparent;
+  background: linear-gradient(
+    120deg,
+    #ffffff 20%,
+    #c4e0ff 40%,
+    #f97316 60%,
+    #ec4899 80%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  /* Glass-like inner glow */
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4), 0 2px 4px rgba(0, 0, 0, 0.4),
+    0 0 12px rgba(255, 255, 255, 0.25);
+
+  /* Slow gradient motion for crystalline sparkle */
+  background-size: 200% 200%;
+  animation: crystalGlow 8s ease-in-out infinite;
+}
+
+@keyframes crystalGlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Optional: sweeping shine highlight */
+.tech-header::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.7) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  animation: shine 4s infinite;
+}
+
+@keyframes shine {
+  0% {
+    left: -75%;
+  }
+  100% {
+    left: 125%;
+  }
+}
+
+.tech-icons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+  align-items: center;
+  width: 100%;
+}
+
+.tech-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.tech-card:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+}
+
+.tech-label {
+  margin-top: 0.5rem;
+  font-size: clamp(0.65rem, 1.5vw, 0.9rem);
+  font-weight: 500;
+  color: #ffffff;
+  text-align: center;
+}
+
+/* ---------- Media Queries for extra control ---------- */
+
+/* For very small phones (<400px) */
+@media (max-width: 400px) {
+  .tech-icons {
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    gap: 1rem;
+  }
+}
+
+/* For tablets and small laptops */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .tech-icons {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+/* Large desktop screens */
+@media (min-width: 1440px) {
+  .technologies-section {
+    padding: 0 8vw;
+  }
+}

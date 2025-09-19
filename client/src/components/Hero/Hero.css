@@ -1,0 +1,305 @@
+/* Base styles */
+.hero-section {
+  /* background-color: #000; */
+  text-align: center;
+  padding: 2rem;
+  color: white;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-circle {
+  width: 16rem;
+  height: 16rem;
+  border-radius: 50%;
+  margin: 0 auto 2rem auto;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6, #6366f1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(236, 72, 153, 0.5);
+}
+
+.profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+  display: block;
+}
+
+.hero-text-container {
+  max-width: 100%;
+}
+
+.hero-heading {
+  font-weight: 900;
+  font-size: 2.5rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.orange-text {
+  color: #fb923c;
+}
+
+.pink-text {
+  color: #ec4899;
+}
+
+.hero-description {
+  color: #9ca3af;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 3rem;
+  white-space: pre-line;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 0.75rem 2.5rem;
+  border-radius: 9999px;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  display: inline-block;
+  border: 2px solid transparent;
+}
+
+.btn-primary {
+  background-color: white;
+  color: black;
+  border-color: white;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #e5e7eb;
+  outline: none;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: white;
+  border-color: white;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background-color: white;
+  color: #121212;
+  outline: none;
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(30, 30, 47, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.modal-content {
+  background: rgba(30, 30, 47, 0.6); /* semi-transparent */
+  backdrop-filter: blur(12px); /* frosted glass effect */
+  border-radius: 12px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+  box-shadow: 0 8px 30px rgba(236, 72, 153, 0.4);
+  color: #fff;
+  animation: modalGradient 8s ease infinite;
+  margin-top: 90px;
+}
+
+.modal-content::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6, #6366f1);
+  z-index: -1;
+  filter: blur(12px);
+  animation: modalGradient 6s ease infinite;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #f97316;
+  cursor: pointer;
+  font-weight: 700;
+  line-height: 1;
+  transition: color 0.3s ease;
+}
+
+.modal-close-btn:hover,
+.modal-close-btn:focus {
+  color: #d3620e;
+  outline: none;
+}
+
+.modal-title {
+  margin-bottom: 1.5rem;
+  margin-top: 0.2rem;
+  font-weight: 700;
+  font-size: 1.75rem;
+  text-align: center;
+}
+
+/* Contact form */
+.contact-form label {
+  display: block;
+  margin: 0.5rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #eee;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  margin-top: 0.5rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.05); /* semi-transparent */
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid transparent;
+  box-shadow: 0 0 12px rgba(236, 72, 153, 0.7), 0 0 24px rgba(139, 92, 246, 0.5),
+    0 0 36px rgba(99, 102, 241, 0.3);
+}
+
+/* Optional: animated gradient border glow */
+.contact-form input:focus::after,
+.contact-form textarea:focus::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6, #6366f1);
+  background-size: 200% 200%;
+  z-index: -1;
+  filter: blur(6px);
+  animation: modalGradient 6s ease infinite;
+}
+
+.inline-fields {
+  display: flex;
+  gap: 1rem;
+  margin: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.inline-field {
+  flex: 1 1 45%;
+  min-width: 150px;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #ec4899, #8b5cf6, #6366f1);
+  background-size: 200% 200%;
+  animation: modalGradient 6s ease infinite;
+  padding: 0.9rem 3rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.3s ease;
+  margin-top: 10px;
+}
+
+.submit-btn:hover {
+  transform: scale(1.05);
+  filter: brightness(1.2);
+}
+
+.submit-btn:focus {
+  background-color: #d3620e;
+  outline: none;
+}
+
+/* Responsive tweaks */
+@media (min-width: 640px) {
+  .hero-section {
+    padding: 2rem;
+  }
+
+  .hero-heading {
+    font-size: 3rem;
+  }
+
+  .hero-description {
+    font-size: 1.1rem;
+    margin-bottom: 4rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .hero-heading {
+    font-size: 1.8rem;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+/* Match the same scrollbar style inside the modal */
+.modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+.modal-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #f97316, #ec4899);
+  border-radius: 4px;
+}

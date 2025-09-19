@@ -1,0 +1,46 @@
+.animated-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(circle, #121212, #000000);
+  overflow: hidden;
+  user-select: none;
+}
+
+.animated-icon {
+  position: absolute;
+  font-size: 3rem;
+  opacity: 0.13;
+  animation-name: float;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  user-select: none;
+  cursor: default;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform;
+}
+
+.animated-icon:hover {
+  opacity: 0.95;
+  transform: scale(1.4);
+  z-index: 10;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0.13;
+  }
+  100% {
+    transform: translateY(-20px) translateX(15px) rotate(15deg);
+    opacity: 0.35;
+  }
+}

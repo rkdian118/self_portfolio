@@ -1,0 +1,136 @@
+.education-section {
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+  color: #fff;
+}
+
+.education-header {
+  position: relative;
+  font-weight: 900;
+  font-size: clamp(1.2rem, 4vw, 2.5rem); /* smaller font size */
+  font-style: italic; /* make text italic */
+  text-transform: uppercase;
+  letter-spacing: 0.08em; /* slightly tighter */
+  text-align: center;
+
+  /* Transparent text to reveal shine layers */
+  color: transparent;
+  background: linear-gradient(
+    120deg,
+    #ffffff 20%,
+    #c4e0ff 40%,
+    #f97316 60%,
+    #ec4899 80%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  /* Glass-like inner glow */
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4), 0 2px 4px rgba(0, 0, 0, 0.4),
+    0 0 12px rgba(255, 255, 255, 0.25);
+
+  /* Slow gradient motion for crystalline sparkle */
+  background-size: 200% 200%;
+  animation: crystalGlow 8s ease-in-out infinite;
+}
+
+@keyframes crystalGlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Optional: sweeping shine highlight */
+.education-header::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.7) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  animation: shine 4s infinite;
+}
+
+@keyframes shine {
+  0% {
+    left: -75%;
+  }
+  100% {
+    left: 125%;
+  }
+}
+
+.education-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.education-card {
+  /* background-color: #292a3a; */
+  padding: 1.6rem 1.8rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgba(120, 141, 255, 0.4);
+  transition: transform 0.3s ease;
+}
+
+.education-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(120, 141, 255, 0.7);
+}
+
+.education-degree {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #58a6ff;
+  margin-bottom: 0.3rem;
+}
+
+.education-institution {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #b6b5b5;
+  margin-bottom: 0.3rem;
+}
+
+.education-duration {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #ccc;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.education-description {
+  font-size: 0.9rem;
+  color: #ccc;
+  line-height: 1.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .education-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .education-grid {
+    grid-template-columns: 1fr;
+  }
+}
