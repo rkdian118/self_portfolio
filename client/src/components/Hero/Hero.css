@@ -13,6 +13,35 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  /* margin-top: 40px; */
+}
+
+.hero-title {
+  font-size: 2.5rem; /* Responsive scaling */
+  font-weight: 700; /* Bold and impactful */
+  line-height: 1.2; /* Slightly tight */
+  color: #222; /* Dark neutral text */
+  text-align: center; /* Centered hero look */
+  margin-bottom: 1rem;
+  letter-spacing: -0.5px; /* Subtle tightening */
+
+  /* Optional gradient text */
+  background: linear-gradient(90deg, #6a5acd, #00b4d8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* Smooth entrance animation */
+  opacity: 0;
+  transform: translateY(20px);
+  animation: heroFade 1s ease-out forwards;
+}
+
+@keyframes heroFade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .profile-circle {
@@ -57,11 +86,30 @@
 }
 
 .hero-description {
-  color: #9ca3af;
-  font-size: 1rem;
-  line-height: 1.6;
-  margin-bottom: 3rem;
-  white-space: pre-line;
+  color: #6b7280; /* Slightly darker gray for better readability */
+  font-size: clamp(1rem, 1.1vw, 1.25rem); /* Responsive font size */
+  line-height: 1.8; /* More breathing space between lines */
+  max-width: 1000px; /* Keep line length readable */
+  margin: 0 auto 3rem auto; /* Center align with bottom spacing */
+  text-align: center; /* Centered text for hero section */
+  white-space: pre-line; /* Preserve line breaks */
+  letter-spacing: 0.5px; /* Slightly spaced letters */
+  font-weight: 400; /* Normal weight for readability */
+  transition: all 0.3s ease-in-out;
+}
+
+/* Optional subtle highlight on hover for interactivity */
+.hero-description span {
+  background: linear-gradient(120deg, #6a5acd, #00b4d8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 500;
+}
+
+/* Example: break bio into multiple lines for emphasis */
+.hero-description br {
+  margin-bottom: 0.5rem;
+  display: block;
 }
 
 .button-group {
@@ -145,7 +193,11 @@
   right: -2px;
   bottom: -2px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #ec4899, #8b5cf6, #6366f1);
+  background: linear-gradient(
+    135deg,
+    #1a2332 0%,
+    #0f1419 100%
+  ); /* dark gradient */
   z-index: -1;
   filter: blur(12px);
   animation: modalGradient 6s ease infinite;

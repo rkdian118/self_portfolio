@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Header.css";
 
+const logo = `${process.env.REACT_APP_BACKEND_UPLOAD_URL}/logo2.png`;
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -25,10 +26,27 @@ const Header: React.FC = () => {
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const yOffset = -80; // Account for fixed header
+      const y =
+        element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+    setIsOpen(false); // Close mobile menu after navigation
+  };
+
   return (
     <header className={`header ${scrolled ? "scrolled" : ""}`}>
       <div className="container">
-        <div className="logo">DRV</div>
+        <div
+          className="logo"
+          onClick={() => scrollToSection("home")}
+          title="Logo"
+        >
+          <img src={logo} alt="DV Logo" className="logo-img" />
+        </div>
 
         <button
           className={`hamburger ${isOpen ? "open" : ""}`}
@@ -49,19 +67,24 @@ const Header: React.FC = () => {
           role="navigation"
         >
           <ul className="nav-list">
-            {["home", "skills", "projects", "experience", "contact"].map(
-              (section) => (
-                <li key={section}>
-                  <a
-                    href={`#${section}`}
-                    className="nav-link"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {section.charAt(0).toUpperCase() + section.slice(1)}
-                  </a>
-                </li>
-              )
-            )}
+            {[
+              "home",
+              "skills",
+              "projects",
+              "experience",
+              "education",
+              "about",
+            ].map((section) => (
+              <li key={section}>
+                <a
+                  href={`#${section}`}
+                  className="nav-link"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {section.charAt(0).toUpperCase() + section.slice(1)}
+                </a>
+              </li>
+            ))}
           </ul>
         </nav>
       </div>

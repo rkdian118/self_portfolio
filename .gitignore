@@ -9,10 +9,11 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-
+/backend/node_modules
+/client/node_modules
 # testing
 /coverage
-
+/dist
 # next.js
 /.next/
 /out/
