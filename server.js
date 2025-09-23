@@ -6,11 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Start backend server
-const { spawn } = require("child_process");
-const backendProcess = spawn("npm", ["start"], {
-  cwd: path.join(__dirname, "backend"),
-  stdio: "inherit",
-});
+const backendApp = require("./backend/dist/server").default;
 
 // Serve uploads folder
 app.use(
@@ -19,14 +15,7 @@ app.use(
 );
 
 // API Proxy - Must be BEFORE static file serving
-app.use(
-  "/api",
-  createProxyMiddleware({
-    target: "http://localhost:5000",
-    changeOrigin: true,
-    logLevel: "info",
-  })
-);
+app.use("/api", backendApp);
 
 // Static file serving
 app.use("/admin", express.static(path.join(__dirname, "admin/dist")));

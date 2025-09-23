@@ -68,13 +68,13 @@ app.get("/health", (req: Request, res: Response) => {
 });
 
 // API routes
-app.use("/api/hero", heroRoutes);
-app.use("/api/projects", projectRoutes);
-app.use("/api/experience", experienceRoutes);
-app.use("/api/education", educationRoutes);
-app.use("/api/contact", contactRoutes);
-app.use("/api/auth", authRoutes);
-app.use("/api/technologies", technologyRoutes);
+app.use("/hero", heroRoutes);
+app.use("/projects", projectRoutes);
+app.use("/experience", experienceRoutes);
+app.use("/education", educationRoutes);
+app.use("/contact", contactRoutes);
+app.use("/auth", authRoutes);
+app.use("/technologies", technologyRoutes);
 
 // Error handling middleware
 app.use(notFound);
