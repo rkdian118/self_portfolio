@@ -2,6 +2,15 @@
 import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
   palette: {
     mode: "dark",
     primary: {
@@ -49,32 +58,32 @@ const theme = createTheme({
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
       fontWeight: 700,
-      fontSize: "2.5rem",
+      fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
       color: "#ffffff",
     },
     h2: {
       fontWeight: 600,
-      fontSize: "2rem",
+      fontSize: "clamp(1.5rem, 3.5vw, 2rem)",
       color: "#ffffff",
     },
     h3: {
       fontWeight: 600,
-      fontSize: "1.75rem",
+      fontSize: "clamp(1.3rem, 3vw, 1.75rem)",
       color: "#ffffff",
     },
     h4: {
       fontWeight: 600,
-      fontSize: "1.5rem",
+      fontSize: "clamp(1.1rem, 2.5vw, 1.5rem)",
       color: "#ffffff",
     },
     h5: {
       fontWeight: 500,
-      fontSize: "1.25rem",
+      fontSize: "clamp(1rem, 2vw, 1.25rem)",
       color: "#ffffff",
     },
     h6: {
       fontWeight: 500,
-      fontSize: "1rem",
+      fontSize: "clamp(0.9rem, 1.5vw, 1rem)",
       color: "#ffffff",
     },
     body1: {
@@ -193,6 +202,29 @@ const theme = createTheme({
           backgroundColor: "rgba(0, 255, 255, 0.1)",
           color: "#00ffff",
           border: "1px solid rgba(0, 255, 255, 0.3)",
+        },
+      },
+    },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          margin: "16px",
+          "@media (max-width: 600px)": {
+            margin: "8px",
+            maxHeight: "90vh",
+          },
+        },
+      },
+    },
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          paddingLeft: "16px",
+          paddingRight: "16px",
+          "@media (max-width: 600px)": {
+            paddingLeft: "8px",
+            paddingRight: "8px",
+          },
         },
       },
     },

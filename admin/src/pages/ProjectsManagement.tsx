@@ -198,8 +198,10 @@ const ProjectsManagement = () => {
         <Box
           sx={{
             display: "flex",
-            alignItems: "center",
+            alignItems: { xs: "flex-start", sm: "center" },
             justifyContent: "space-between",
+            flexDirection: { xs: "column", sm: "row" },
+            gap: { xs: 2, sm: 0 },
             mb: 2,
           }}
         >
@@ -222,6 +224,7 @@ const ProjectsManagement = () => {
                   color: "#ffffff",
                   fontWeight: 700,
                   mb: 0.5,
+                  fontSize: { xs: "1.5rem", sm: "2rem", md: "2.125rem" },
                 }}
               >
                 Projects Management
@@ -239,9 +242,11 @@ const ProjectsManagement = () => {
             variant="contained"
             startIcon={<Add />}
             onClick={() => handleOpen()}
+            fullWidth={false}
             sx={{
               bgcolor: "#00ffff",
               color: "#000",
+              width: { xs: "100%", sm: "auto" },
               "&:hover": {
                 bgcolor: alpha("#00ffff", 0.8),
               },
@@ -349,7 +354,9 @@ const ProjectsManagement = () => {
                   sx={{
                     display: "flex",
                     justifyContent: "space-between",
-                    alignItems: "center",
+                    alignItems: { xs: "flex-start", sm: "center" },
+                    flexDirection: { xs: "column", sm: "row" },
+                    gap: { xs: 1, sm: 0 },
                     mb: 1,
                   }}
                 >
@@ -435,6 +442,8 @@ const ProjectsManagement = () => {
           sx: {
             bgcolor: "#1a1a1a",
             border: "1px solid rgba(0, 255, 255, 0.3)",
+            m: { xs: 1, sm: 2 },
+            maxHeight: { xs: "90vh", sm: "80vh" },
           },
         }}
       >
@@ -481,7 +490,7 @@ const ProjectsManagement = () => {
                 },
               }}
             />
-            <Box sx={{ display: "flex", gap: 2 }}>
+            <Box sx={{ display: "flex", gap: { xs: 1, sm: 2 }, flexDirection: { xs: "column", sm: "row" } }}>
               <TextField
                 fullWidth
                 label="Duration"

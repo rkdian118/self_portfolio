@@ -80,15 +80,22 @@ const Dashboard = () => {
         </Typography>
       </Box>
 
-      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3, mb: 4 }}>
+      <Box sx={{ 
+        display: "grid", 
+        gridTemplateColumns: { 
+          xs: "1fr", 
+          sm: "repeat(2, 1fr)", 
+          lg: "repeat(4, 1fr)" 
+        }, 
+        gap: { xs: 2, md: 3 }, 
+        mb: 4 
+      }}>
         {stats.map((stat, index) => (
           <Card
             key={index}
             onMouseEnter={() => setHoveredCard(index)}
             onMouseLeave={() => setHoveredCard(null)}
             sx={{
-              minWidth: 280,
-              flex: 1,
               background: `linear-gradient(135deg, ${alpha(
                 stat.color,
                 0.1
@@ -204,7 +211,16 @@ const Dashboard = () => {
           Quick Actions
         </Typography>
 
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, mb: 3 }}>
+        <Box sx={{ 
+          display: "grid", 
+          gridTemplateColumns: { 
+            xs: "1fr", 
+            sm: "repeat(2, 1fr)", 
+            md: "repeat(4, 1fr)" 
+          }, 
+          gap: 2, 
+          mb: 3 
+        }}>
           {[
             {
               label: "Add Project",
@@ -247,7 +263,7 @@ const Dashboard = () => {
                 display: "flex",
                 alignItems: "center",
                 gap: 1.5,
-                minWidth: 160,
+                width: "100%",
                 "&:hover": {
                   transform: "translateY(-2px)",
                   boxShadow: `0 8px 25px ${alpha(action.color, 0.3)}`,

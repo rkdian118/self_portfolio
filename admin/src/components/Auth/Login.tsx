@@ -93,11 +93,11 @@ const Login: React.FC = () => {
       }}
     >
       <CssBaseline />
-      <Container component="main" maxWidth="sm">
+      <Container component="main" maxWidth="sm" sx={{ px: { xs: 2, sm: 3 } }}>
         <Paper
           elevation={24}
           sx={{
-            p: 6,
+            p: { xs: 3, sm: 4, md: 6 },
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -136,6 +136,7 @@ const Login: React.FC = () => {
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               textAlign: "center",
+              fontSize: { xs: "1.8rem", sm: "2.5rem", md: "3rem" },
             }}
           >
             Portfolio Admin

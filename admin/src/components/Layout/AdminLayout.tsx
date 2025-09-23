@@ -15,6 +15,7 @@ import {
   Tooltip,
   useTheme,
   alpha,
+  useMediaQuery,
 } from "@mui/material";
 import {
   Dashboard,
@@ -25,6 +26,7 @@ import {
   Logout,
   TrendingUp,
   Folder,
+  Menu as MenuIcon,
 } from "@mui/icons-material";
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -45,6 +47,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const { hero, projects, contactForms, fetchHero, fetchContactForms } =
     useAdminStore();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
     fetchHero();
@@ -111,6 +115,158 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     navigate("/admin/login");
   };
 
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const drawer = (
+    <>
+      <Toolbar />
+      <Box sx={{ p: 2 }}>
+        <Typography
+          variant="overline"
+          sx={{
+            color: "rgba(224, 242, 241, 0.6)",
+            fontWeight: 600,
+            letterSpacing: 1.2,
+            px: 2,
+          }}
+        >
+          MAIN MENU
+        </Typography>
+      </Box>
+
+      <List sx={{ px: 1 }}>
+        {menuItems.map((item) => {
+          const isActive = location.pathname === item.path;
+          const isHovered = hoveredItem === item.text;
+
+          return (
+            <ListItemButton
+              key={item.text}
+              onClick={() => {
+                navigate(item.path);
+                if (isMobile) setMobileOpen(false);
+              }}
+              onMouseEnter={() => setHoveredItem(item.text)}
+              onMouseLeave={() => setHoveredItem(null)}
+              sx={{
+                mb: 0.5,
+                mx: 1,
+                borderRadius: 2,
+                minHeight: 48,
+                position: "relative",
+                overflow: "hidden",
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: isActive
+                    ? `linear-gradient(135deg, ${alpha(
+                        item.color,
+                        0.2
+                      )}, ${alpha(item.color, 0.1)})`
+                    : isHovered
+                    ? `linear-gradient(135deg, ${alpha(
+                        item.color,
+                        0.1
+                      )}, ${alpha(item.color, 0.05)})`
+                    : "transparent",
+                  borderRadius: 2,
+                  transition: "all 0.3s ease",
+                },
+                "&::after": isActive
+                  ? {
+                      content: '""',
+                      position: "absolute",
+                      left: 0,
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      width: 4,
+                      height: 24,
+                      background: `linear-gradient(180deg, ${
+                        item.color
+                      }, ${alpha(item.color, 0.7)})`,
+                      borderRadius: "0 2px 2px 0",
+                    }
+                  : {},
+                transform: isHovered ? "translateX(4px)" : "translateX(0)",
+                boxShadow: isActive
+                  ? `0 4px 20px ${alpha(item.color, 0.3)}`
+                  : "none",
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  color: isActive ? item.color : "#e0f2f1",
+                  minWidth: 40,
+                  transition: "all 0.3s ease",
+                  transform: isHovered ? "scale(1.1)" : "scale(1)",
+                }}
+              >
+                {item.icon}
+              </ListItemIcon>
+
+              <ListItemText
+                primary={item.text}
+                sx={{
+                  "& .MuiTypography-root": {
+                    color: isActive ? "#ffffff" : "#e0f2f1",
+                    fontWeight: isActive ? 600 : 400,
+                    fontSize: "0.9rem",
+                    transition: "all 0.3s ease",
+                  },
+                }}
+              />
+
+              {item.badge && (
+                <Chip
+                  label={item.badge}
+                  size="small"
+                  sx={{
+                    height: 20,
+                    fontSize: "0.7rem",
+                    bgcolor: item.color,
+                    color: "#1a2332",
+                    fontWeight: 600,
+                    minWidth: 24,
+                  }}
+                />
+              )}
+            </ListItemButton>
+          );
+        })}
+      </List>
+
+      <Box sx={{ mt: "auto", p: 2 }}>
+        <Divider sx={{ borderColor: "rgba(0, 255, 255, 0.1)", mb: 2 }} />
+        <Box
+          sx={{
+            p: 2,
+            borderRadius: 2,
+            background:
+              "linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(0, 255, 255, 0.05))",
+            border: "1px solid rgba(0, 255, 255, 0.2)",
+          }}
+        >
+          <Typography
+            variant="caption"
+            sx={{ color: "#00ffff", fontWeight: 600 }}
+          >
+            System Status
+          </Typography>
+          <Typography variant="body2" sx={{ color: "#e0f2f1", mt: 0.5 }}>
+            All systems operational
+          </Typography>
+        </Box>
+      </Box>
+    </>
+  );
+
   return (
     <Box
       sx={{
@@ -132,6 +288,17 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       >
         <Toolbar sx={{ justifyContent: "space-between" }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            {isMobile && (
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2 }}
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
             {hero?.profileImage ? (
               <Avatar
                 src={hero.profileImage}
@@ -159,9 +326,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 {hero?.name?.charAt(0) || "P"}
               </Box>
             )}
-            <Box>
+            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
               <Typography
-                variant="h5"
+                variant={isMobile ? "h6" : "h5"}
                 sx={{
                   fontWeight: 700,
                   background: "linear-gradient(45deg, #00ffff, #ffffff)",
@@ -265,171 +432,60 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       </AppBar>
 
       {/* Enhanced Sidebar */}
-      <Drawer
-        variant="permanent"
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: {
-            width: drawerWidth,
-            boxSizing: "border-box",
-            background: "linear-gradient(180deg, #1a2332 0%, #0f1419 100%)",
-            borderRight: "1px solid rgba(0, 255, 255, 0.1)",
-            backdropFilter: "blur(20px)",
-          },
-        }}
+      <Box
+        component="nav"
+        sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
       >
-        <Toolbar />
-
-        <Box sx={{ p: 2 }}>
-          <Typography
-            variant="overline"
-            sx={{
-              color: "rgba(224, 242, 241, 0.6)",
-              fontWeight: 600,
-              letterSpacing: 1.2,
-              px: 2,
-            }}
-          >
-            MAIN MENU
-          </Typography>
-        </Box>
-
-        <List sx={{ px: 1 }}>
-          {menuItems.map((item) => {
-            const isActive = location.pathname === item.path;
-            const isHovered = hoveredItem === item.text;
-
-            return (
-              <ListItemButton
-                key={item.text}
-                onClick={() => navigate(item.path)}
-                onMouseEnter={() => setHoveredItem(item.text)}
-                onMouseLeave={() => setHoveredItem(null)}
-                sx={{
-                  mb: 0.5,
-                  mx: 1,
-                  borderRadius: 2,
-                  minHeight: 48,
-                  position: "relative",
-                  overflow: "hidden",
-                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                  "&::before": {
-                    content: '""',
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: isActive
-                      ? `linear-gradient(135deg, ${alpha(
-                          item.color,
-                          0.2
-                        )}, ${alpha(item.color, 0.1)})`
-                      : isHovered
-                      ? `linear-gradient(135deg, ${alpha(
-                          item.color,
-                          0.1
-                        )}, ${alpha(item.color, 0.05)})`
-                      : "transparent",
-                    borderRadius: 2,
-                    transition: "all 0.3s ease",
-                  },
-                  "&::after": isActive
-                    ? {
-                        content: '""',
-                        position: "absolute",
-                        left: 0,
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        width: 4,
-                        height: 24,
-                        background: `linear-gradient(180deg, ${
-                          item.color
-                        }, ${alpha(item.color, 0.7)})`,
-                        borderRadius: "0 2px 2px 0",
-                      }
-                    : {},
-                  transform: isHovered ? "translateX(4px)" : "translateX(0)",
-                  boxShadow: isActive
-                    ? `0 4px 20px ${alpha(item.color, 0.3)}`
-                    : "none",
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    color: isActive ? item.color : "#e0f2f1",
-                    minWidth: 40,
-                    transition: "all 0.3s ease",
-                    transform: isHovered ? "scale(1.1)" : "scale(1)",
-                  }}
-                >
-                  {item.icon}
-                </ListItemIcon>
-
-                <ListItemText
-                  primary={item.text}
-                  sx={{
-                    "& .MuiTypography-root": {
-                      color: isActive ? "#ffffff" : "#e0f2f1",
-                      fontWeight: isActive ? 600 : 400,
-                      fontSize: "0.9rem",
-                      transition: "all 0.3s ease",
-                    },
-                  }}
-                />
-
-                {item.badge && (
-                  <Chip
-                    label={item.badge}
-                    size="small"
-                    sx={{
-                      height: 20,
-                      fontSize: "0.7rem",
-                      bgcolor: item.color,
-                      color: "#1a2332",
-                      fontWeight: 600,
-                      minWidth: 24,
-                    }}
-                  />
-                )}
-              </ListItemButton>
-            );
-          })}
-        </List>
-
-        <Box sx={{ mt: "auto", p: 2 }}>
-          <Divider sx={{ borderColor: "rgba(0, 255, 255, 0.1)", mb: 2 }} />
-          <Box
-            sx={{
-              p: 2,
-              borderRadius: 2,
-              background:
-                "linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(0, 255, 255, 0.05))",
-              border: "1px solid rgba(0, 255, 255, 0.2)",
-            }}
-          >
-            <Typography
-              variant="caption"
-              sx={{ color: "#00ffff", fontWeight: 600 }}
-            >
-              System Status
-            </Typography>
-            <Typography variant="body2" sx={{ color: "#e0f2f1", mt: 0.5 }}>
-              All systems operational
-            </Typography>
-          </Box>
-        </Box>
-      </Drawer>
+        {/* Mobile drawer */}
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: 'block', md: 'none' },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: drawerWidth,
+              background: "linear-gradient(180deg, #1a2332 0%, #0f1419 100%)",
+              borderRight: "1px solid rgba(0, 255, 255, 0.1)",
+              backdropFilter: "blur(20px)",
+            },
+          }}
+        >
+          {drawer}
+        </Drawer>
+        
+        {/* Desktop drawer */}
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: 'none', md: 'block' },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: drawerWidth,
+              background: "linear-gradient(180deg, #1a2332 0%, #0f1419 100%)",
+              borderRight: "1px solid rgba(0, 255, 255, 0.1)",
+              backdropFilter: "blur(20px)",
+            },
+          }}
+          open
+        >
+          {drawer}
+        </Drawer>
+      </Box>
 
       {/* Enhanced Main Content */}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
+          p: { xs: 1, sm: 2, md: 3 },
           minHeight: "100vh",
           pt: "88px",
+          width: { md: `calc(100% - ${drawerWidth}px)` },
         }}
       >
         {children}
