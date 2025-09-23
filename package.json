@@ -13,7 +13,7 @@
     "build:client": "cd client && npm run build",
     "build:admin": "cd admin && npm run build",
     "start": "node server.js",
-    "install:all": "npm install && cd backend && npm install --include=dev --legacy-peer-deps && cd ../client && npm install --force && cd ../admin && npm install --force"
+    "install:all": "npm install && cd backend && npm install --include=dev --legacy-peer-deps && cd ../client && npm install --force && cd ../admin && npm install --include=dev --legacy-peer-deps"
   },
   "dependencies": {
     "express": "^4.18.2",
