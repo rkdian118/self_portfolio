@@ -6,12 +6,13 @@ import "./Projects.css";
 
 const Projects: React.FC = () => {
   const { projects, loading, errors, fetchProjects } = usePortfolioStore();
+  console.log(projects, "projects");
 
   useEffect(() => {
-    if (projects?.length === 0) {
+    if (!projects || projects.length === 0) {
       fetchProjects({ limit: 20 });
     }
-  }, [projects?.length, fetchProjects]);
+  }, [projects, fetchProjects]);
 
   const handleProjectClick = (website: string) => {
     if (website) {
@@ -55,7 +56,7 @@ const Projects: React.FC = () => {
   }
 
   // Show message if no projects
-  if (projects?.length === 0) {
+  if (!projects || projects.length === 0) {
     return (
       <section className="projects-section" id="projects">
         <div className="container">
@@ -73,7 +74,7 @@ const Projects: React.FC = () => {
     <section id="projects" className="projects-section">
       <h2 className="projects-header">Creations & Work</h2>
       <div className="projects-list">
-        {projects.map((project) => (
+        {projects?.map((project) => (
           <div
             key={project._id || project.name}
             className="project-item"

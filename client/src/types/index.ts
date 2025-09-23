@@ -24,6 +24,24 @@ export interface ApiListResponse<T>
     pagination: PaginationData;
   }> {}
 
+export interface ProjectsResponse
+  extends ApiResponse<{
+    projects: Project[];
+    pagination: PaginationData;
+  }> {}
+
+export interface ExperiencesResponse
+  extends ApiResponse<{
+    experiences: Experience[];
+    pagination: PaginationData;
+  }> {}
+
+export interface EducationResponse
+  extends ApiResponse<{
+    education: Education[];
+    pagination: PaginationData;
+  }> {}
+
 // Entity Interfaces
 export interface Hero {
   _id?: string;

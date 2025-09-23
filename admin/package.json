@@ -1,0 +1,53 @@
+{
+  "name": "admin",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Admin panel for Dhanraj Vishwakarma Portfolio",
+  "scripts": {
+    "dev": "vite --port 3001",
+    "build": "tsc && vite build",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview --port 3001"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@hookform/resolvers": "^3.3.1",
+    "@mui/icons-material": "^5.14.9",
+    "@mui/lab": "^5.0.0-alpha.143",
+    "@mui/material": "^7.3.2",
+    "@mui/system": "^7.3.2",
+    "@mui/types": "^7.4.6",
+    "@mui/x-charts": "^6.15.0",
+    "@mui/x-data-grid": "^6.15.0",
+    "@mui/x-date-pickers": "^6.15.0",
+    "axios": "^1.5.0",
+    "date-fns": "^2.30.0",
+    "lodash": "^4.17.21",
+    "notistack": "^3.0.1",
+    "quill": "^1.3.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
+    "react-hook-form": "^7.46.1",
+    "react-quill": "^2.0.0",
+    "react-router-dom": "^6.16.0",
+    "recharts": "^2.8.0",
+    "yup": "^1.3.2",
+    "zustand": "^4.4.6"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.199",
+    "@types/react": "^18.2.22",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react": "^4.0.3",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
+  }
+}

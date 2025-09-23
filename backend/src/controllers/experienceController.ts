@@ -36,7 +36,7 @@ export const getExperiences = asyncHandler(
     res.status(200).json({
       success: true,
       data: {
-        items: experiences,
+        experiences: experiences,
         pagination: {
           current: pageNum,
           total: Math.ceil(total / limitNum),

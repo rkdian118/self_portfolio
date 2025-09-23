@@ -107,14 +107,18 @@ export const uploadProfileImage = asyncHandler(
     }
 
     // Update with new image URL
-    hero.profileImage = req.file.path;
+    const imageUrl = req.file.path.startsWith('http') 
+      ? req.file.path 
+      : `${process.env.BACKEND_URL || 'http://localhost:5000'}/${req.file.path.replace(/\\/g, '/')}`;
+    
+    hero.profileImage = imageUrl;
     await hero.save();
 
     res.status(200).json({
       success: true,
       message: "Profile image uploaded successfully",
       data: {
-        imageUrl: req.file.path,
+        profileImage: imageUrl,
         hero,
       },
     });
@@ -157,14 +161,18 @@ export const uploadCV = asyncHandler(
     }
 
     // Update with new CV URL
-    hero.cvUrl = req.file.path;
+    const cvUrl = req.file.path.startsWith('http') 
+      ? req.file.path 
+      : `${process.env.BACKEND_URL || 'http://localhost:5000'}/${req.file.path.replace(/\\/g, '/')}`;
+    
+    hero.cvUrl = cvUrl;
     await hero.save();
 
     res.status(200).json({
       success: true,
       message: "CV uploaded successfully",
       data: {
-        cvUrl: req.file.path,
+        cvUrl: cvUrl,
         hero,
       },
     });

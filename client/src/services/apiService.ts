@@ -1,6 +1,9 @@
 import {
   ApiResponse,
   ApiListResponse,
+  ProjectsResponse,
+  ExperiencesResponse,
+  EducationResponse,
   Hero,
   Project,
   Experience,
@@ -56,7 +59,7 @@ class ApiService {
     search?: string;
     page?: number;
     limit?: number;
-  }): Promise<ApiListResponse<Project>> {
+  }): Promise<ProjectsResponse> {
     const searchParams = new URLSearchParams();
 
     if (params?.search) searchParams.append("search", params.search);
@@ -66,7 +69,7 @@ class ApiService {
     const query = searchParams.toString();
     const endpoint = `/projects${query ? `?${query}` : ""}`;
 
-    return this.request<ApiListResponse<Project>>(endpoint);
+    return this.request<ProjectsResponse>(endpoint);
   }
 
   async getProject(id: string): Promise<ApiResponse<{ project: Project }>> {
@@ -78,7 +81,7 @@ class ApiService {
     search?: string;
     page?: number;
     limit?: number;
-  }): Promise<ApiListResponse<Experience>> {
+  }): Promise<ExperiencesResponse> {
     const searchParams = new URLSearchParams();
 
     if (params?.search) searchParams.append("search", params.search);
@@ -88,7 +91,7 @@ class ApiService {
     const query = searchParams.toString();
     const endpoint = `/experience${query ? `?${query}` : ""}`;
 
-    return this.request<ApiListResponse<Experience>>(endpoint);
+    return this.request<ExperiencesResponse>(endpoint);
   }
 
   // Education API
@@ -96,7 +99,7 @@ class ApiService {
     search?: string;
     page?: number;
     limit?: number;
-  }): Promise<ApiListResponse<Education>> {
+  }): Promise<EducationResponse> {
     const searchParams = new URLSearchParams();
 
     if (params?.search) searchParams.append("search", params.search);
@@ -106,7 +109,7 @@ class ApiService {
     const query = searchParams.toString();
     const endpoint = `/education${query ? `?${query}` : ""}`;
 
-    return this.request<ApiListResponse<Education>>(endpoint);
+    return this.request<EducationResponse>(endpoint);
   }
 
   // Contact API

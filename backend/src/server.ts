@@ -14,6 +14,7 @@ import experienceRoutes from "./routes/experienceRoutes";
 import educationRoutes from "./routes/educationRoutes";
 import contactRoutes from "./routes/contactRoutes";
 import authRoutes from "./routes/authRoutes";
+import technologyRoutes from "./routes/technologyRoutes";
 
 // Import middleware
 import { errorHandler } from "./middleware/errorMiddleware";
@@ -28,8 +29,8 @@ const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || "900000"), // 15 minutes
-  max: parseInt(process.env.RATE_LIMIT_MAX || "100"), // limit each IP to 100 requests per windowMs
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || "60000"), // 1 minute
+  max: parseInt(process.env.RATE_LIMIT_MAX || "1000"), // limit each IP to 1000 requests per minute
   message: {
     error: "Too many requests from this IP, please try again later.",
   },
@@ -73,6 +74,7 @@ app.use("/api/experience", experienceRoutes);
 app.use("/api/education", educationRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/technologies", technologyRoutes);
 
 // Error handling middleware
 app.use(notFound);

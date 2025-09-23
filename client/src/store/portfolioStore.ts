@@ -70,7 +70,6 @@ export const usePortfolioStore = create<PortfolioStore>()(
     (set, get) => ({
       // Initial state
       hero: null,
-      technologies: [],
       projects: [],
       experiences: [],
       education: [],
@@ -120,8 +119,10 @@ export const usePortfolioStore = create<PortfolioStore>()(
 
         try {
           const response = await apiService.getProjects(params);
+          console.log('Projects API Response:', response);
           if (response.success && response.data) {
-            set({ projects: response.data.items });
+            console.log('Setting projects:', response.data.projects);
+            set({ projects: response.data.projects });
           } else {
             throw new Error(response.error || "Failed to fetch projects");
           }
@@ -143,8 +144,10 @@ export const usePortfolioStore = create<PortfolioStore>()(
 
         try {
           const response = await apiService.getExperiences(params);
+          console.log('Experiences API Response:', response);
           if (response.success && response.data) {
-            set({ experiences: response.data.items });
+            console.log('Setting experiences:', response.data.experiences);
+            set({ experiences: response.data.experiences });
           } else {
             throw new Error(response.error || "Failed to fetch experiences");
           }
@@ -166,8 +169,10 @@ export const usePortfolioStore = create<PortfolioStore>()(
 
         try {
           const response = await apiService.getEducation(params);
+          console.log('Education API Response:', response);
           if (response.success && response.data) {
-            set({ education: response.data?.items || [] });
+            console.log('Setting education:', response.data?.education || []);
+            set({ education: response.data?.education || [] });
           } else {
             throw new Error(response.error || "Failed to fetch education");
           }

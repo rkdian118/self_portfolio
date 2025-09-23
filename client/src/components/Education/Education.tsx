@@ -8,10 +8,10 @@ const Education: React.FC = () => {
   const { education, loading, errors, fetchEducation } = usePortfolioStore();
 
   useEffect(() => {
-    if (education?.length === 0) {
+    if (!education || education.length === 0) {
       fetchEducation({ limit: 20 });
     }
-  }, [education, fetchEducation]);
+  }, []);
 
   // Show loading skeleton while fetching
   if (loading.education) {
@@ -38,7 +38,7 @@ const Education: React.FC = () => {
   }
 
   // Show message if no education data
-  if (education?.length === 0) {
+  if (!education || education.length === 0) {
     return (
       <section className="education-section" id="education">
         <h2 className="education-header">Academic Journey</h2>

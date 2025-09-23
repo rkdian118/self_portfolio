@@ -9,10 +9,10 @@ const Experience: React.FC = () => {
     usePortfolioStore();
 
   useEffect(() => {
-    if (experiences?.length === 0) {
+    if (!experiences || experiences.length === 0) {
       fetchExperiences({ limit: 20 });
     }
-  }, [experiences?.length, fetchExperiences]);
+  }, []);
 
   const handleCompanyClick = (website: string) => {
     if (website) {
@@ -45,7 +45,7 @@ const Experience: React.FC = () => {
   }
 
   // Show message if no experiences
-  if (experiences?.length === 0) {
+  if (!experiences || experiences.length === 0) {
     return (
       <section className="experience-section" id="experience">
         <h2 className="experience-header">Professional Journey</h2>
@@ -62,7 +62,7 @@ const Experience: React.FC = () => {
       <h2 className="experience-header">Professional Journey</h2>
 
       <div className="timeline">
-        {experiences.map((exp) => (
+        {experiences?.map((exp) => (
           <div
             key={exp._id || `${exp.company}-${exp.title}`}
             className="timeline-item"

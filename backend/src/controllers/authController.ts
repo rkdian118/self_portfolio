@@ -256,3 +256,88 @@ export const changePassword = asyncHandler(
     });
   }
 );
+
+/**
+ * @desc    Verify token
+ * @route   GET /api/auth/verify
+ * @access  Private
+ */
+export const verifyToken = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const admin = await Admin.findById(req.user?.userId);
+
+    if (!admin || !admin.isActive) {
+      res.status(401).json({
+        success: false,
+        message: "Invalid token",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Token is valid",
+      data: {
+        user: {
+          id: admin._id,
+          name: admin.name,
+          email: admin.email,
+          role: admin.role,
+          isActive: admin.isActive,
+          createdAt: admin.createdAt,
+          updatedAt: admin.lastLoginAt,
+        },
+      },
+    });
+  }
+);
+
+/**
+ * @desc    Get dashboard statistics
+ * @route   GET /api/auth/dashboard-stats
+ * @access  Private
+ */
+export const getDashboardStats = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const [Hero, Project, Experience, Education, Contact, ContactForm] =
+      await Promise.all([
+        import("../models/Hero").then((m) => m.Hero),
+        import("../models/Project").then((m) => m.Project),
+        import("../models/Experience").then((m) => m.Experience),
+        import("../models/Education").then((m) => m.Education),
+        import("../models/Contact").then((m) => m.Contact),
+        import("../models/ContactForm").then((m) => m.ContactForm),
+      ]);
+
+    const [
+      totalProjects,
+      totalExperiences,
+      totalEducation,
+      totalContactForms,
+      unreadContactForms,
+      activeProjects,
+      featuredProjects,
+    ] = await Promise.all([
+      Project.countDocuments({ isActive: true }),
+      Experience.countDocuments({ isActive: true }),
+      Education.countDocuments({ isActive: true }),
+      ContactForm.countDocuments(),
+      ContactForm.countDocuments({ isRead: false }),
+      Project.countDocuments({ isActive: true, status: "completed" }),
+      Project.countDocuments({ isActive: true, isFeatured: true }),
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        totalProjects,
+        totalExperiences,
+        totalEducation,
+        totalContactForms,
+        unreadContactForms,
+        activeProjects,
+        featuredProjects,
+      },
+    });
+  }
+);

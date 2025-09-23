@@ -1,0 +1,28 @@
+{
+  "name": "portfolio-monorepo",
+  "version": "1.0.0",
+  "description": "Full-stack portfolio application",
+  "main": "server.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:client\" \"npm run dev:admin\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "dev:admin": "cd admin && npm run dev",
+    "build": "npm run build:backend && npm run build:client && npm run build:admin",
+    "build:backend": "cd backend && npm run build",
+    "build:client": "cd client && npm run build",
+    "build:admin": "cd admin && npm run build",
+    "start": "node server.js",
+    "install:all": "npm install && cd backend && npm install --force && cd ../client && npm install --force && cd ../admin && npm install --force"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

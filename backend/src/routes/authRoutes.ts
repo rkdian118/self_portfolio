@@ -6,6 +6,8 @@ import {
   getProfile,
   updateProfile,
   changePassword,
+  verifyToken,
+  getDashboardStats,
 } from "../controllers/authController";
 import { authenticate } from "../middleware/authMiddleware";
 import {
@@ -45,6 +47,11 @@ router.post(
   ],
   logout
 );
+
+// @route   GET /api/auth/verify
+// @desc    Verify token
+// @access  Private
+router.get("/verify", authenticate, verifyToken);
 
 // @route   GET /api/auth/profile
 // @desc    Get admin profile
@@ -96,5 +103,10 @@ router.put(
   ],
   changePassword
 );
+
+// @route   GET /api/auth/dashboard-stats
+// @desc    Get dashboard statistics
+// @access  Private
+router.get("/dashboard-stats", authenticate, getDashboardStats);
 
 export default router;

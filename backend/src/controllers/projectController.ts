@@ -39,7 +39,7 @@ export const getProjects = asyncHandler(
     res.status(200).json({
       success: true,
       data: {
-        items: projects,
+        projects: projects,
         pagination: {
           current: pageNum,
           total: Math.ceil(total / limitNum),
@@ -246,14 +246,18 @@ export const uploadProjectImage = asyncHandler(
     }
 
     // Update with new image URL
-    project.image = req.file.path;
+    const imageUrl = req.file.path.startsWith('http') 
+      ? req.file.path 
+      : `${process.env.BACKEND_URL || 'http://localhost:5000'}/${req.file.path.replace(/\\/g, '/')}`;
+    
+    project.image = imageUrl;
     await project.save();
 
     res.status(200).json({
       success: true,
       message: "Project image uploaded successfully",
       data: {
-        imageUrl: req.file.path,
+        imageUrl: imageUrl,
         project,
       },
     });

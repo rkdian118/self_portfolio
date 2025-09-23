@@ -51,7 +51,6 @@ export const validateHero = [
   handleValidationErrors,
 ];
 
-
 // Project validations
 export const validateProject = [
   body("name")
@@ -138,10 +137,6 @@ export const validateContact = [
     .isEmail()
     .normalizeEmail()
     .withMessage("Please enter a valid email"),
-  body("phone")
-    .trim()
-    .matches(/^\\+?[1-9]\\d{1,14}$/)
-    .withMessage("Please enter a valid phone number"),
   body("linkedin")
     .isURL()
     .contains("linkedin.com")

@@ -2,41 +2,97 @@ import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import { Request, Response, NextFunction } from "express";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
+import path from "path";
+import fs from "fs";
+import dotenv from "dotenv";
 
-// Configure Cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+dotenv.config();
+// Check if Cloudinary is configured
+const isCloudinaryConfigured = () => {
+  const configured =
+    process.env.CLOUDINARY_CLOUD_NAME &&
+    process.env.CLOUDINARY_API_KEY &&
+    process.env.CLOUDINARY_API_SECRET;
+
+  return configured;
+};
+
+// Configure Cloudinary only if credentials are provided
+if (isCloudinaryConfigured()) {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+}
+
+// Ensure uploads directory exists
+const uploadsDir = path.join(process.cwd(), "uploads");
+const imagesDir = path.join(uploadsDir, "images");
+const documentsDir = path.join(uploadsDir, "documents");
+
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+if (!fs.existsSync(imagesDir)) {
+  fs.mkdirSync(imagesDir, { recursive: true });
+}
+if (!fs.existsSync(documentsDir)) {
+  fs.mkdirSync(documentsDir, { recursive: true });
+}
+
+// Local storage configuration
+const localStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const isImage = file.mimetype.startsWith("image/");
+    const dir = isImage ? imagesDir : documentsDir;
+    cb(null, dir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(
+      null,
+      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
+    );
+  },
 });
 
-// Cloudinary storage for images
-const imageStorage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: "portfolio/images",
-    allowed_formats: ["jpg", "jpeg", "png", "webp"],
-    transformation: [
-      {
-        width: 1200,
-        height: 800,
-        crop: "limit",
-        quality: "auto",
-        format: "auto",
-      },
-    ],
-  } as any,
-});
+// Storage configuration based on Cloudinary availability
+let imageStorage: any;
+let documentStorage: any;
 
-// Cloudinary storage for documents
-const documentStorage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: "portfolio/documents",
-    allowed_formats: ["pdf", "doc", "docx"],
-    resource_type: "raw",
-  } as any,
-});
+if (isCloudinaryConfigured()) {
+  // Cloudinary storage for images
+  imageStorage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+      folder: "uploads/images",
+      allowed_formats: ["jpg", "jpeg", "png", "webp"],
+      transformation: [
+        {
+          width: 1200,
+          height: 800,
+          crop: "limit",
+          quality: "auto",
+          format: "auto",
+        },
+      ],
+    } as any,
+  });
+
+  // Cloudinary storage for documents
+  documentStorage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+      folder: "uploads/documents",
+      allowed_formats: ["pdf", "doc", "docx"],
+      resource_type: "raw",
+    } as any,
+  });
+} else {
+  imageStorage = localStorage;
+  documentStorage = localStorage;
+}
 
 // File filter function
 const fileFilter = (allowedTypes: string[]) => {
@@ -118,29 +174,50 @@ export const handleUploadError = (
     });
     return;
   }
+  console.error("Upload error:", error);
 
-  next(error);
+  res.status(500).json({
+    success: false,
+    message: "File upload failed",
+    error:
+      process.env.NODE_ENV === "development"
+        ? error.message
+        : "Internal server error",
+  });
 };
 
 /**
- * Delete file from Cloudinary
+ * Delete file from Cloudinary or local storage
  */
 export const deleteCloudinaryFile = async (publicId: string): Promise<void> => {
   try {
-    await cloudinary.uploader.destroy(publicId);
+    if (isCloudinaryConfigured()) {
+      await cloudinary.uploader.destroy(publicId);
+    } else {
+      // For local storage, publicId is the file path
+      const filePath = path.join(process.cwd(), publicId);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+    }
   } catch (error) {
-    console.error("Error deleting file from Cloudinary:", error);
+    console.error("Error deleting file:", error);
   }
 };
 
 /**
- * Extract public ID from Cloudinary URL
+ * Extract public ID from Cloudinary URL or local file path
  */
 export const extractPublicId = (url: string): string => {
-  const parts = url.split("/");
-  const filename: any = parts[parts.length - 1];
-  if (!filename) {
-    return "";
+  if (isCloudinaryConfigured()) {
+    const parts = url.split("/");
+    const filename: any = parts[parts.length - 1];
+    if (!filename) {
+      return "";
+    }
+    return filename.split(".")[0];
+  } else {
+    // For local storage, return the relative path
+    return url.replace(process.env.BACKEND_URL || "http://localhost:5000", "");
   }
-  return filename.split(".")[0];
 };

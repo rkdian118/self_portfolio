@@ -35,7 +35,7 @@ export const getEducation = asyncHandler(
     res.status(200).json({
       success: true,
       data: {
-        items: education,
+        education: education,
         pagination: {
           current: pageNum,
           total: Math.ceil(total / limitNum),
