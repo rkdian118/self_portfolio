@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const { createProxyMiddleware } = require("http-proxy-middleware");
+// const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,18 +31,11 @@ app.get("*", (req, res) => {
 });
 
 // Start server after backend is ready
-setTimeout(() => {
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-    console.log(`📱 Web: http://localhost:${PORT}`);
-    console.log(`⚙️  Admin: http://localhost:${PORT}/admin`);
-    console.log(`🔌 API: http://localhost:${PORT}/api`);
-  });
-}, 2000);
-
-// Cleanup
-process.on("SIGINT", () => {
-  console.log("\n🛑 Shutting down...");
-  backendProcess.kill();
-  process.exit();
+// setTimeout(() => {
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📱 Web: http://localhost:${PORT}`);
+  console.log(`⚙️  Admin: http://localhost:${PORT}/admin`);
+  console.log(`🔌 API: http://localhost:${PORT}/api`);
 });
+// }, 2000);
