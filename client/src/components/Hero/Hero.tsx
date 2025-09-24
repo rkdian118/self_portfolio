@@ -70,9 +70,7 @@ const Hero: React.FC = () => {
   };
 
   const handleDownloadCV = () => {
-    const apiUrl = process.env.REACT_APP_API_URL || '/api';
-    const downloadUrl = `${apiUrl}/hero/download-cv`;
-    window.open(downloadUrl, '_blank');
+    window.open(hero?.cvUrl, "_blank");
   };
 
   // Show loading skeleton while fetching
