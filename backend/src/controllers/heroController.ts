@@ -23,9 +23,18 @@ export const getHero = asyncHandler(
       return;
     }
 
+    // If we have a Cloudinary URL, add the download link
+    let cvDownloadUrl = hero.cvUrl;
+    if (hero.cvUrl && hero.cvUrl.includes("res.cloudinary.com")) {
+      cvDownloadUrl = hero.cvUrl.replace(
+        "/upload/",
+        "/upload/fl_attachment:Dhanraj-CV.pdf/"
+      );
+    }
+
     res.status(200).json({
       success: true,
-      data: { hero },
+      data: { ...hero.toObject(), cvDownloadUrl },
     });
   }
 );

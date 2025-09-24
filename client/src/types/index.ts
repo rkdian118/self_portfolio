@@ -50,6 +50,7 @@ export interface Hero {
   bio: string;
   yearsExperience: number;
   cvUrl?: string;
+  cvDownloadUrl?: string;
   profileImage?: string;
   isActive?: boolean;
   createdAt?: string;

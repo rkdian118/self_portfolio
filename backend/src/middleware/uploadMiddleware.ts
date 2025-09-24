@@ -86,7 +86,7 @@ if (isCloudinaryConfigured()) {
     params: {
       folder: "uploads/documents",
       allowed_formats: ["pdf"],
-      resource_type: "image",
+      resource_type: "raw",
       format: "pdf",
     } as any,
   });

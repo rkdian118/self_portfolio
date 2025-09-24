@@ -70,7 +70,7 @@ const Hero: React.FC = () => {
   };
 
   const handleDownloadCV = () => {
-    window.open(hero?.cvUrl, "_blank");
+    window.open(hero?.cvDownloadUrl, "_blank");
   };
 
   // Show loading skeleton while fetching
