@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import { Hero } from "../models/Hero";
 import { asyncHandler } from "../middleware/errorMiddleware";
 import {
-  deleteCloudinaryFile,
-  extractPublicId,
+  deleteLocalFile,
+  extractFilePath,
 } from "../middleware/uploadMiddleware";
 
 /**
@@ -99,20 +99,15 @@ export const uploadProfileImage = asyncHandler(
     // Delete old image if exists
     if (hero.profileImage) {
       try {
-        const publicId = extractPublicId(hero.profileImage);
-        await deleteCloudinaryFile(publicId);
+        const filePath = extractFilePath(hero.profileImage);
+        await deleteLocalFile(filePath);
       } catch (error) {
         console.error("Error deleting old profile image:", error);
       }
     }
 
-    // Update with new image URL
-    const imageUrl = req.file.path.startsWith("http")
-      ? req.file.path
-      : `${
-          process.env.BACKEND_URL || "http://localhost:5000"
-        }/${req.file.path.replace(/\\/g, "/")}`;
-
+    // Create local file URL
+    const imageUrl = `/api/uploads/images/${req.file.filename}`;
     hero.profileImage = imageUrl;
     await hero.save();
 
@@ -155,22 +150,23 @@ export const uploadCV = asyncHandler(
     // Delete old CV if exists
     if (hero.cvUrl) {
       try {
-        const publicId = extractPublicId(hero.cvUrl);
-        await deleteCloudinaryFile(publicId);
+        const filePath = extractFilePath(hero.cvUrl);
+        await deleteLocalFile(filePath);
       } catch (error) {
         console.error("Error deleting old CV:", error);
       }
     }
 
-    // Store the base Cloudinary URL
-    hero.cvUrl = req.file.path;
+    // Create local file URL
+    const cvUrl = `/api/uploads/documents/${req.file.filename}`;
+    hero.cvUrl = cvUrl;
     await hero.save();
 
     res.status(200).json({
       success: true,
       message: "CV uploaded successfully",
       data: {
-        cvUrl: req.file.path,
+        cvUrl: cvUrl,
         hero,
       },
     });
@@ -195,8 +191,8 @@ export const deleteProfileImage = asyncHandler(
     }
 
     try {
-      const publicId = extractPublicId(hero.profileImage);
-      await deleteCloudinaryFile(publicId);
+      const filePath = extractFilePath(hero.profileImage);
+      await deleteLocalFile(filePath);
 
       hero.profileImage = undefined;
       await hero.save();
@@ -233,8 +229,8 @@ export const deleteCV = asyncHandler(
     }
 
     try {
-      const publicId = extractPublicId(hero.cvUrl);
-      await deleteCloudinaryFile(publicId);
+      const filePath = extractFilePath(hero.cvUrl);
+      await deleteLocalFile(filePath);
 
       hero.cvUrl = undefined;
       await hero.save();
@@ -270,15 +266,9 @@ export const downloadCV = asyncHandler(
       return;
     }
 
-    // Create proper download URL with filename
+    // Set headers for PDF download
     const filename = `${hero.name?.replace(/\s+/g, '_') || 'CV'}.pdf`;
-    let downloadUrl = hero.cvUrl;
-    
-    // Ensure it's a Cloudinary URL and add download flag
-    if (downloadUrl.includes('/upload/')) {
-      downloadUrl = downloadUrl.replace('/upload/', `/upload/fl_attachment:${filename}/`);
-    }
-    
-    res.redirect(downloadUrl);
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.redirect(hero.cvUrl);
   }
 );

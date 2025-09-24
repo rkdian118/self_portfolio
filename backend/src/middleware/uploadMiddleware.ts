@@ -1,30 +1,7 @@
 import multer from "multer";
-import { v2 as cloudinary } from "cloudinary";
 import { Request, Response, NextFunction } from "express";
-import { CloudinaryStorage } from "multer-storage-cloudinary";
 import path from "path";
 import fs from "fs";
-import dotenv from "dotenv";
-
-dotenv.config();
-// Check if Cloudinary is configured
-const isCloudinaryConfigured = () => {
-  const configured =
-    process.env.CLOUDINARY_CLOUD_NAME &&
-    process.env.CLOUDINARY_API_KEY &&
-    process.env.CLOUDINARY_API_SECRET;
-
-  return configured;
-};
-
-// Configure Cloudinary only if credentials are provided
-if (isCloudinaryConfigured()) {
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-  });
-}
 
 // Ensure uploads directory exists
 const uploadsDir = path.join(process.cwd(), "uploads");
@@ -45,54 +22,21 @@ if (!fs.existsSync(documentsDir)) {
 const localStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     const isImage = file.mimetype.startsWith("image/");
-    const dir = isImage ? imagesDir : documentsDir;
+    const dir = isImage ? "uploads/images" : "uploads/documents";
     cb(null, dir);
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(
-      null,
-      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
-    );
+    const extension = path.extname(file.originalname);
+    const isImage = file.mimetype.startsWith("image/");
+    const prefix = isImage ? "image" : "cv";
+    cb(null, `${prefix}-${uniqueSuffix}${extension}`);
   },
 });
 
-// Storage configuration based on Cloudinary availability
-let imageStorage: any;
-let documentStorage: any;
-
-if (isCloudinaryConfigured()) {
-  // Cloudinary storage for images
-  imageStorage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-      folder: "uploads/images",
-      allowed_formats: ["jpg", "jpeg", "png", "webp"],
-      transformation: [
-        {
-          width: 1200,
-          height: 800,
-          crop: "limit",
-          quality: "auto",
-          format: "auto",
-        },
-      ],
-    } as any,
-  });
-
-  // Cloudinary storage for documents
-  documentStorage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-      folder: "uploads/documents",
-      resource_type: "auto",
-      public_id: (req: any, file: any) => `CV-${Date.now()}`,
-    } as any,
-  });
-} else {
-  imageStorage = localStorage;
-  documentStorage = localStorage;
-}
+// Use local storage for all uploads
+const imageStorage = localStorage;
+const documentStorage = localStorage;
 
 // File filter function
 const fileFilter = (allowedTypes: string[]) => {
@@ -187,18 +131,13 @@ export const handleUploadError = (
 };
 
 /**
- * Delete file from Cloudinary or local storage
+ * Delete file from local storage
  */
-export const deleteCloudinaryFile = async (publicId: string): Promise<void> => {
+export const deleteLocalFile = async (filePath: string): Promise<void> => {
   try {
-    if (isCloudinaryConfigured()) {
-      await cloudinary.uploader.destroy(publicId);
-    } else {
-      // For local storage, publicId is the file path
-      const filePath = path.join(process.cwd(), publicId);
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
+    const fullPath = path.join(process.cwd(), filePath);
+    if (fs.existsSync(fullPath)) {
+      fs.unlinkSync(fullPath);
     }
   } catch (error) {
     console.error("Error deleting file:", error);
@@ -206,18 +145,8 @@ export const deleteCloudinaryFile = async (publicId: string): Promise<void> => {
 };
 
 /**
- * Extract public ID from Cloudinary URL or local file path
+ * Extract file path from URL
  */
-export const extractPublicId = (url: string): string => {
-  if (isCloudinaryConfigured()) {
-    const parts = url.split("/");
-    const filename: any = parts[parts.length - 1];
-    if (!filename) {
-      return "";
-    }
-    return filename.split(".")[0];
-  } else {
-    // For local storage, return the relative path
-    return url.replace(process.env.BACKEND_URL || "http://localhost:5000", "");
-  }
+export const extractFilePath = (url: string): string => {
+  return url.replace(process.env.BACKEND_URL || "http://localhost:5000", "");
 };
