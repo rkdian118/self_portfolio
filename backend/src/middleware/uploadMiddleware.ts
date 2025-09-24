@@ -85,8 +85,8 @@ if (isCloudinaryConfigured()) {
     cloudinary: cloudinary,
     params: {
       folder: "uploads/documents",
-      allowed_formats: ["pdf"],
       resource_type: "raw",
+      public_id: (req: any, file: any) => `Dhanraj-CV-${Date.now()}`, // Cloudinary will append correct extension
     } as any,
   });
 } else {

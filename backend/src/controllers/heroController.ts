@@ -24,12 +24,10 @@ export const getHero = asyncHandler(
     }
 
     // If we have a Cloudinary URL, add the download link
-    let cvDownloadUrl = hero.cvUrl;
+    let cvDownloadUrl = "";
     if (hero.cvUrl && hero.cvUrl.includes("res.cloudinary.com")) {
-      cvDownloadUrl = hero.cvUrl.replace(
-        "/upload/",
-        "/raw/upload/fl_attachment:Dhanraj-CV.pdf/"
-      );
+      const parts = hero.cvUrl.split("/upload/");
+      cvDownloadUrl = `${parts[0]}/upload/fl_attachment:Dhanraj-CV.pdf/${parts[1]}`;
     }
 
     res.status(200).json({
