@@ -34,7 +34,7 @@ export const getHero = asyncHandler(
 
     res.status(200).json({
       success: true,
-      data: { ...hero.toObject(), cvDownloadUrl },
+      data: { hero: { ...hero.toObject(), cvDownloadUrl } },
     });
   }
 );
