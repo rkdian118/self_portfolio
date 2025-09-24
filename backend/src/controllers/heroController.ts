@@ -23,16 +23,9 @@ export const getHero = asyncHandler(
       return;
     }
 
-    // If we have a Cloudinary URL, add the download link
-    let cvDownloadUrl = "";
-    if (hero.cvUrl && hero.cvUrl.includes("res.cloudinary.com")) {
-      const parts = hero.cvUrl.split("/upload/");
-      cvDownloadUrl = `${parts[0]}/upload/fl_attachment:Dhanraj-CV.pdf/${parts[1]}`;
-    }
-
     res.status(200).json({
       success: true,
-      data: { hero: { ...hero.toObject(), cvDownloadUrl } },
+      data: { hero },
     });
   }
 );
@@ -277,12 +270,15 @@ export const downloadCV = asyncHandler(
       return;
     }
 
-    const filename = `${hero.name?.replace(/\s+/g, "_") + "CV" || "CV"}.pdf`;
-    const downloadUrl = hero.cvUrl.replace(
-      "/upload/",
-      `/upload/fl_attachment:${filename}/`
-    );
-
+    // Create proper download URL with filename
+    const filename = `${hero.name?.replace(/\s+/g, '_') || 'CV'}.pdf`;
+    let downloadUrl = hero.cvUrl;
+    
+    // Ensure it's a Cloudinary URL and add download flag
+    if (downloadUrl.includes('/upload/')) {
+      downloadUrl = downloadUrl.replace('/upload/', `/upload/fl_attachment:${filename}/`);
+    }
+    
     res.redirect(downloadUrl);
   }
 );

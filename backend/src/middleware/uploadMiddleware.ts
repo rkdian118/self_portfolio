@@ -85,8 +85,8 @@ if (isCloudinaryConfigured()) {
     cloudinary: cloudinary,
     params: {
       folder: "uploads/documents",
-      resource_type: "raw",
-      public_id: (req: any, file: any) => `Dhanraj-CV-${Date.now()}`, // Cloudinary will append correct extension
+      resource_type: "auto",
+      public_id: (req: any, file: any) => `CV-${Date.now()}`,
     } as any,
   });
 } else {
@@ -130,7 +130,7 @@ export const uploadDocument = multer({
   limits: {
     fileSize: 10 * 1024 * 1024, // 10MB
   },
-  fileFilter: fileFilter(["pdf", "doc", "docx"]),
+  fileFilter: fileFilter(["pdf"]),
 });
 
 // Memory storage for temporary processing
