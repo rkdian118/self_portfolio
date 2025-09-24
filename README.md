@@ -84,16 +84,6 @@ CLOUDINARY_API_SECRET=your_cloudinary_secret
 3. Set build command: `npm run build`
 4. Set start command: `npm start`
 
-### Docker
-```dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY . .
-RUN ./deploy.sh
-EXPOSE 3000
-CMD ["npm", "start"]
-```
-
 ## Scripts
 
 - `npm run dev` - Start all services in development

@@ -164,10 +164,7 @@ export const uploadCV = asyncHandler(
 
     // Update with new CV URL - create downloadable link
     const baseUrl = req.file.path;
-    const downloadUrl = baseUrl.replace(
-      "/upload/",
-      "/upload/fl_attachment/"
-    );
+    const downloadUrl = baseUrl.replace("/upload/", "/upload/fl_attachment/");
     hero.cvUrl = downloadUrl;
     await hero.save();
 
@@ -254,6 +251,26 @@ export const deleteCV = asyncHandler(
         success: false,
         message: "Error deleting CV",
       });
+    }
+  }
+);
+
+/**
+ * @desc    Delete CV
+ * @route   DELETE /api/hero/cv
+ * @access  Private (Admin)
+ */
+export const downloadCV = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const hero = await Hero.findOne({ isActive: true });
+      if (!hero || !hero.cvUrl) {
+        res.status(404).json({ success: false, message: "CV not found" });
+        return;
+      }
+      res.redirect(hero.cvUrl);
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Error downloading CV" });
     }
   }
 );
