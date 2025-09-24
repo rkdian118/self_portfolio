@@ -42,6 +42,7 @@ WORKDIR /app
 COPY --from=builder /app/client/build ./client/build
 COPY --from=builder /app/admin/dist ./admin/dist
 COPY --from=builder /app/backend/dist ./backend/dist
+COPY --from=builder /app/backend/uploads ./backend/uploads
 COPY --from=builder /app/backend/package*.json ./backend/
 COPY --from=builder /app/.env ./
 COPY server.js ./
@@ -50,6 +51,9 @@ COPY package*.json ./
 # Install production dependencies
 RUN npm install --omit=dev
 RUN npm --prefix backend install --omit=dev --legacy-peer-deps
+
+# Create uploads directory
+RUN mkdir -p backend/uploads
 
 # Set environment
 ENV NODE_ENV=production
