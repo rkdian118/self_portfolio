@@ -190,7 +190,7 @@ const Technologies: React.FC = () => {
       <div className="tech-icons">
         {technologies.map(({ Icon, label, color }) => (
           <div className="tech-card" key={label}>
-            <Icon size={40} color={color} />
+            <Icon size={32} color={color} />
             <span className="tech-label">{label}</span>
           </div>
         ))}

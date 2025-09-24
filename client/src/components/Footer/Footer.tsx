@@ -3,12 +3,12 @@ import "./Footer.css";
 import {
   FaLinkedin,
   FaGithub,
-  FaTwitter,
+  // FaTwitter,
   FaEnvelope,
   FaPhone,
   FaMapMarkerAlt,
   FaHeart,
-  FaArrowUp,
+  // FaArrowUp,
 } from "react-icons/fa";
 import { IconBaseProps } from "react-icons";
 import { usePortfolioStore } from "../../store/portfolioStore";
@@ -19,10 +19,10 @@ const logo = `${process.env.REACT_APP_BACKEND_UPLOAD_URL}/logo2.png`;
 const FaLinkedinIcon = FaLinkedin as React.FunctionComponent<IconBaseProps>;
 const FaGithubIcon = FaGithub as React.FunctionComponent<IconBaseProps>;
 const FaEnvelopeIcon = FaEnvelope as React.FunctionComponent<IconBaseProps>;
-const FaTwitterIcon = FaTwitter as React.FunctionComponent<IconBaseProps>;
+// const FaTwitterIcon = FaTwitter as React.FunctionComponent<IconBaseProps>;
 const FaPhoneIcon = FaPhone as React.FunctionComponent<IconBaseProps>;
 const FaHeartIcon = FaHeart as React.FunctionComponent<IconBaseProps>;
-const FaArrowUpIcon = FaArrowUp as React.FunctionComponent<IconBaseProps>;
+// const FaArrowUpIcon = FaArrowUp as React.FunctionComponent<IconBaseProps>;
 const FaMapMarkerAltIcon =
   FaMapMarkerAlt as React.FunctionComponent<IconBaseProps>;
 
@@ -253,14 +253,14 @@ const Footer: React.FC = () => {
               )}
 
               {/* Twitter - you can add this to your Contact model if needed */}
-              <a
+              {/* <a
                 href="https://twitter.com/dhanraj_dev"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Twitter Profile"
               >
                 <FaTwitterIcon />
-              </a>
+              </a> */}
 
               {contactData.email && (
                 <a
