@@ -1,41 +1,60 @@
+// server.js (root)
 const express = require("express");
 const path = require("path");
-// const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Start backend server
-const backendApp = require("./backend/dist/server").default;
+(async () => {
+  try {
+    // Import compiled backend (built by tsc -> backend/dist)
+    const backendModule = require("./backend/dist/server");
+    // support both commonJS and esModule default export
+    const backendApp = backendModule.default || backendModule;
+    const connectDB =
+      backendModule.connectDB || backendModule.default?.connectDB;
 
-// Serve uploads folder
-app.use(
-  "/api/uploads",
-  express.static(path.join(__dirname, "backend/uploads"))
-);
+    // If backend provides a connectDB function, call it before starting.
+    if (typeof connectDB === "function") {
+      console.log("🔌 Connecting to the database...");
+      await connectDB();
+      console.log("🔌 Database connected.");
+    } else {
+      console.log(
+        "⚠️ connectDB not found on backend module. Skipping DB connect."
+      );
+    }
 
-// API Proxy - Must be BEFORE static file serving
-app.use("/api", backendApp);
+    // Mount backend at /api (backend routes should be like /hero, /projects etc)
+    app.use("/api", backendApp);
 
-// Static file serving
-app.use("/admin", express.static(path.join(__dirname, "admin/dist")));
-app.use(express.static(path.join(__dirname, "client/build")));
+    // Serve uploads (backend uploads folder)
+    app.use(
+      "/api/uploads",
+      express.static(path.join(__dirname, "backend/uploads"))
+    );
 
-// SPA routing - Admin routes
-app.get("/admin*", (req, res) => {
-  res.sendFile(path.join(__dirname, "admin/dist/index.html"));
-});
+    // Admin static + SPA fallback
+    app.use("/admin", express.static(path.join(__dirname, "admin/dist")));
+    app.get("/admin/*", (req, res) =>
+      res.sendFile(path.join(__dirname, "admin/dist/index.html"))
+    );
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client/build/index.html"));
-});
+    // Client static + SPA fallback
+    app.use(express.static(path.join(__dirname, "client/build")));
+    app.get("*", (req, res) =>
+      res.sendFile(path.join(__dirname, "client/build/index.html"))
+    );
 
-// Start server after backend is ready
-// setTimeout(() => {
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📱 Web: http://localhost:${PORT}`);
-  console.log(`⚙️  Admin: http://localhost:${PORT}/admin`);
-  console.log(`🔌 API: http://localhost:${PORT}/api`);
-});
-// }, 2000);
+    // Start the single server
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`📱 Client: /`);
+      console.log(`⚙️ Admin: /admin`);
+      console.log(`🔌 API: /api`);
+    });
+  } catch (err) {
+    console.error("❌ Error while starting server:", err);
+    process.exit(1);
+  }
+})();

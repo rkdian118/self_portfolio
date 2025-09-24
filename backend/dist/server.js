@@ -53,13 +53,13 @@ app.get("/health", (req, res) => {
         uptime: process.uptime(),
     });
 });
-app.use("/api/hero", heroRoutes_1.default);
-app.use("/api/projects", projectRoutes_1.default);
-app.use("/api/experience", experienceRoutes_1.default);
-app.use("/api/education", educationRoutes_1.default);
-app.use("/api/contact", contactRoutes_1.default);
-app.use("/api/auth", authRoutes_1.default);
-app.use("/api/technologies", technologyRoutes_1.default);
+app.use("/hero", heroRoutes_1.default);
+app.use("/projects", projectRoutes_1.default);
+app.use("/experience", experienceRoutes_1.default);
+app.use("/education", educationRoutes_1.default);
+app.use("/contact", contactRoutes_1.default);
+app.use("/auth", authRoutes_1.default);
+app.use("/technologies", technologyRoutes_1.default);
 app.use(errorMiddleware_2.notFound);
 app.use(errorMiddleware_1.errorHandler);
 const connectDB = async () => {
@@ -101,6 +101,8 @@ process.on("uncaughtException", (err) => {
     console.error("❌ Uncaught Exception:", err.message);
     process.exit(1);
 });
-startServer();
+if (require.main === module) {
+    startServer();
+}
 exports.default = app;
 //# sourceMappingURL=server.js.map

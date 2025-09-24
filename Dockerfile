@@ -1,11 +1,60 @@
-FROM node:18-alpine
+# ----------------------------
+# Stage 1: Build frontend & admin
+# ----------------------------
+FROM node:20-alpine AS builder
+
 WORKDIR /app
+
+# Copy package files
 COPY package*.json ./
-COPY backend/package*.json ./backend/
-COPY client/package*.json ./client/
-COPY admin/package*.json ./admin/
-RUN npm run install:all
-COPY . .
-RUN npm run build
-EXPOSE 3000
-CMD ["npm", "start"]
+
+# Install root dependencies
+RUN npm install
+
+# Copy client & admin
+COPY client ./client
+COPY admin ./admin
+COPY backend ./backend
+
+# Build backend (TypeScript)
+RUN npm --prefix backend install --leagacy-peer-deps
+RUN npm --prefix backend run build
+
+# Build client & admin
+RUN npm --prefix client install --leagacy-peer-deps
+RUN npm --prefix client run build
+
+RUN npm --prefix admin install --leagacy-peer-deps
+RUN npm --prefix admin run build
+
+# ----------------------------
+# Stage 2: Run the server
+# ----------------------------
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy built frontend/admin/backend and root server
+COPY --from=builder /app/client/build ./client/build
+COPY --from=builder /app/admin/dist ./admin/dist
+COPY --from=builder /app/backend/dist ./backend/dist
+COPY --from=builder /app/backend/package*.json ./backend/
+COPY server.js ./
+COPY package*.json ./
+
+# Install production dependencies
+RUN npm install --omit=dev
+RUN npm --prefix backend install --omit=dev
+
+# Set environment
+ENV NODE_ENV=production
+ENV PORT=10000
+EXPOSE $PORT
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+USER nextjs
+
+# Start server
+CMD ["node", "server.js"]
