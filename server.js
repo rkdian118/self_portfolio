@@ -21,7 +21,7 @@ app.use("/api", backendApp);
 app.use("/admin", express.static(path.join(__dirname, "admin/dist")));
 app.use(express.static(path.join(__dirname, "client/build")));
 
-// SPA routing - Admin routes
+// SPA routing - Admin routes added
 app.get("/admin*", (req, res) => {
   res.sendFile(path.join(__dirname, "admin/dist/index.html"));
 });
