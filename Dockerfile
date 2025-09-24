@@ -38,7 +38,6 @@ WORKDIR /app
 COPY --from=builder /app/client/build ./client/build
 COPY --from=builder /app/admin/dist ./admin/dist
 COPY --from=builder /app/backend/dist ./backend/dist
-COPY --from=builder /app/backend/uploads ./backend/uploads
 COPY --from=builder /app/backend/package*.json ./backend/
 COPY server.js ./
 COPY package*.json ./
@@ -47,8 +46,8 @@ COPY package*.json ./
 RUN npm install --omit=dev
 RUN npm --prefix backend install --omit=dev --legacy-peer-deps
 
-# Create uploads directory
-RUN mkdir -p backend/uploads
+# ✅ Create uploads directory with correct ownership
+RUN mkdir -p /app/uploads && chown -R 1001:1001 /app/uploads
 
 # Set environment variables
 ENV NODE_ENV=production

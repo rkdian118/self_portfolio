@@ -162,11 +162,11 @@ export const uploadCV = asyncHandler(
       }
     }
 
-    // Update with new CV URL
-    const baseUrl = req.file.path; // the Cloudinary path you got
+    // Update with new CV URL - create downloadable link
+    const baseUrl = req.file.path;
     const downloadUrl = baseUrl.replace(
       "/upload/",
-      "/upload/fl_attachment:Dhheeraj-CV.pdf/"
+      "/upload/fl_attachment/"
     );
     hero.cvUrl = downloadUrl;
     await hero.save();

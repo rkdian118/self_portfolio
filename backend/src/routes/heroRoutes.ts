@@ -7,6 +7,7 @@ import {
   deleteProfileImage,
   deleteCV,
 } from "../controllers/heroController";
+import { Hero } from "../models/Hero";
 import { authenticate, authorizeAdmin } from "../middleware/authMiddleware";
 import {
   validateHero,
@@ -63,5 +64,20 @@ router.delete("/image", authenticate, authorizeAdmin(), deleteProfileImage);
 // @desc    Delete CV
 // @access  Private (Admin)
 router.delete("/cv", authenticate, authorizeAdmin(), deleteCV);
+
+// @route   GET /api/hero/download-cv
+// @desc    Download CV
+// @access  Public
+router.get("/download-cv", async (req, res) => {
+  try {
+    const hero = await Hero.findOne({ isActive: true });
+    if (!hero || !hero.cvUrl) {
+      return res.status(404).json({ success: false, message: "CV not found" });
+    }
+    res.redirect(hero.cvUrl);
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error downloading CV" });
+  }
+});
 
 export default router;
