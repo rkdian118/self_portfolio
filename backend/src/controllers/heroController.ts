@@ -28,7 +28,7 @@ export const getHero = asyncHandler(
     if (hero.cvUrl && hero.cvUrl.includes("res.cloudinary.com")) {
       cvDownloadUrl = hero.cvUrl.replace(
         "/upload/",
-        "/upload/fl_attachment:Dhanraj-CV.pdf/"
+        "/raw/upload/fl_attachment:Dhanraj-CV.pdf/"
       );
     }
 
