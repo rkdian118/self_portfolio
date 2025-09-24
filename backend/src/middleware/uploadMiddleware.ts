@@ -87,7 +87,6 @@ if (isCloudinaryConfigured()) {
       folder: "uploads/documents",
       allowed_formats: ["pdf"],
       resource_type: "raw",
-      format: "pdf",
     } as any,
   });
 } else {
