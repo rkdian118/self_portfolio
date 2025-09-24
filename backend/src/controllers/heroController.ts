@@ -107,10 +107,12 @@ export const uploadProfileImage = asyncHandler(
     }
 
     // Update with new image URL
-    const imageUrl = req.file.path.startsWith('http') 
-      ? req.file.path 
-      : `${process.env.BACKEND_URL || 'http://localhost:5000'}/${req.file.path.replace(/\\/g, '/')}`;
-    
+    const imageUrl = req.file.path.startsWith("http")
+      ? req.file.path
+      : `${
+          process.env.BACKEND_URL || "http://localhost:5000"
+        }/${req.file.path.replace(/\\/g, "/")}`;
+
     hero.profileImage = imageUrl;
     await hero.save();
 
@@ -161,18 +163,19 @@ export const uploadCV = asyncHandler(
     }
 
     // Update with new CV URL
-    const cvUrl = req.file.path.startsWith('http') 
-      ? req.file.path 
-      : `${process.env.BACKEND_URL || 'http://localhost:5000'}/${req.file.path.replace(/\\/g, '/')}`;
-    
-    hero.cvUrl = cvUrl;
+    const baseUrl = req.file.path; // the Cloudinary path you got
+    const downloadUrl = baseUrl.replace(
+      "/upload/",
+      "/upload/fl_attachment:Dhheeraj-CV.pdf/"
+    );
+    hero.cvUrl = downloadUrl;
     await hero.save();
 
     res.status(200).json({
       success: true,
       message: "CV uploaded successfully",
       data: {
-        cvUrl: cvUrl,
+        cvUrl: downloadUrl,
         hero,
       },
     });

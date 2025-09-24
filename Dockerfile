@@ -15,10 +15,6 @@ RUN npm install
 COPY client ./client
 COPY admin ./admin
 COPY backend ./backend
-COPY .env ./
-COPY .env ./client/
-COPY .env ./admin/
-COPY .env ./backend/
 
 # Build backend (TypeScript)
 RUN npm --prefix backend install --legacy-peer-deps
@@ -44,7 +40,6 @@ COPY --from=builder /app/admin/dist ./admin/dist
 COPY --from=builder /app/backend/dist ./backend/dist
 COPY --from=builder /app/backend/uploads ./backend/uploads
 COPY --from=builder /app/backend/package*.json ./backend/
-COPY --from=builder /app/.env ./
 COPY server.js ./
 COPY package*.json ./
 
@@ -55,9 +50,18 @@ RUN npm --prefix backend install --omit=dev --legacy-peer-deps
 # Create uploads directory
 RUN mkdir -p backend/uploads
 
-# Set environment
+# Set environment variables
 ENV NODE_ENV=production
 ENV PORT=10000
+ENV NODE_PORT=5000
+ENV MONGODB_URI=mongodb+srv://rkdian118_db_user:1xjPm0bwSBiqpkGX@cluster0.rmanpms.mongodb.net/portfolio
+ENV JWT_SECRET=portfolio_secret_key_5647
+ENV JWT_REFRESH_SECRET=portfolio_secret_key_5647
+ENV CLOUDINARY_CLOUD_NAME=dzdtvv0jl
+ENV CLOUDINARY_API_KEY=593395727585441
+ENV CLOUDINARY_API_SECRET=I1vcWB3y1lE67Ppiqx78MpBSB5k
+ENV RATE_LIMIT_WINDOW_MS=60000
+ENV RATE_LIMIT_MAX=1000
 EXPOSE $PORT
 
 # Create non-root user
