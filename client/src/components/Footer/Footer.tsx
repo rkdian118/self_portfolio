@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Footer.css";
 import {
   FaLinkedin,
@@ -28,6 +28,15 @@ const FaMapMarkerAltIcon =
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    // Lock body scroll when menu open on mobile
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   // Get contact data and functions from Zustand store
   const { contact, loading, errors, fetchContact } = usePortfolioStore();
@@ -41,16 +50,6 @@ const Footer: React.FC = () => {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 20, behavior: "smooth" });
-  };
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const yOffset = -80;
-      const y =
-        element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
-    }
   };
 
   // Show loading skeleton while fetching contact data
@@ -118,61 +117,19 @@ const Footer: React.FC = () => {
           <div className="footer-section">
             <h4>Quick Links</h4>
             <ul className="footer-links">
-              <li>
-                <a
-                  href="#home"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection("home");
-                  }}
-                >
-                  Home
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#skills"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection("skills");
-                  }}
-                >
-                  Skills
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#projects"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection("projects");
-                  }}
-                >
-                  Projects
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#experience"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection("experience");
-                  }}
-                >
-                  Experience
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#education"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection("education");
-                  }}
-                >
-                  Education
-                </a>
-              </li>
+              {["home", "skills", "projects", "experience", "education"].map(
+                (section) => (
+                  <li key={section}>
+                    <a
+                      href={`#${section}`}
+                      // className="nav-link"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {section.charAt(0).toUpperCase() + section.slice(1)}
+                    </a>
+                  </li>
+                )
+              )}
             </ul>
           </div>
 
@@ -180,21 +137,11 @@ const Footer: React.FC = () => {
           <div className="footer-section">
             <h4>Services</h4>
             <ul className="footer-links">
-              <li>
-                <a href="#services">Web Development</a>
-              </li>
-              <li>
-                <a href="#services">Mobile Apps</a>
-              </li>
-              <li>
-                <a href="#services">API Integration</a>
-              </li>
-              <li>
-                <a href="#services">Cloud Solutions</a>
-              </li>
-              <li>
-                <a href="#services">Consulting</a>
-              </li>
+              <li>Web Development</li>
+              <li>Mobile Apps</li>
+              <li>API Integration</li>
+              <li>Cloud Solutions</li>
+              <li>Deployment Services</li>
             </ul>
           </div>
 
@@ -214,7 +161,7 @@ const Footer: React.FC = () => {
               {contactData.phone && (
                 <div className="contact-item">
                   <FaPhoneIcon className="contact-icon" />
-                  <a href={`tel:${contactData.phone.replace(/\\s+/g, "")}`}>
+                  <a href={`tel:${contactData.phone.replace(/\s+/g, "")}`}>
                     {contactData.phone}
                   </a>
                 </div>
