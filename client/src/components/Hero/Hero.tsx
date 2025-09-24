@@ -70,9 +70,14 @@ const Hero: React.FC = () => {
   };
 
   const handleDownloadCV = () => {
-    const apiUrl = process.env.REACT_APP_API_URL || '/api';
-    const downloadUrl = `${apiUrl}/hero/download-cv`;
-    window.open(downloadUrl, '_blank');
+    if (hero?.cvUrl) {
+      const link = document.createElement("a");
+      link.href = hero.cvUrl;
+      link.download = "Dhanraj-CV.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
   };
 
   // Show loading skeleton while fetching

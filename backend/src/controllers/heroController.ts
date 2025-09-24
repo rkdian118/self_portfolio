@@ -266,9 +266,8 @@ export const downloadCV = asyncHandler(
       return;
     }
 
-    // Set headers for PDF download
-    const filename = `${hero.name?.replace(/\s+/g, '_') || 'CV'}.pdf`;
-    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    // Set headers for PDF download with fixed filename
+    res.setHeader('Content-Disposition', 'attachment; filename="Dhanraj-CV.pdf"');
     res.redirect(hero.cvUrl);
   }
 );
