@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import { Project } from "../models/Project";
 import { asyncHandler } from "../middleware/errorMiddleware";
 import {
-  deleteCloudinaryFile,
-  extractPublicId,
+  deleteLocalFile,
+  extractFilePath,
 } from "../middleware/uploadMiddleware";
 
 /**
@@ -189,11 +189,11 @@ export const deleteProject = asyncHandler(
       return;
     }
 
-    // Delete associated image from Cloudinary if exists
+    // Delete associated image from local storage if exists
     if (project.image) {
       try {
-        const publicId = extractPublicId(project.image);
-        await deleteCloudinaryFile(publicId);
+        const filePath = extractFilePath(project.image);
+        await deleteLocalFile(filePath);
       } catch (error) {
         console.error("Error deleting project image:", error);
       }
@@ -238,18 +238,15 @@ export const uploadProjectImage = asyncHandler(
     // Delete old image if exists
     if (project.image) {
       try {
-        const publicId = extractPublicId(project.image);
-        await deleteCloudinaryFile(publicId);
+        const filePath = extractFilePath(project.image);
+        await deleteLocalFile(filePath);
       } catch (error) {
         console.error("Error deleting old project image:", error);
       }
     }
 
-    // Update with new image URL
-    const imageUrl = req.file.path.startsWith('http') 
-      ? req.file.path 
-      : `${process.env.BACKEND_URL || 'http://localhost:5000'}/${req.file.path.replace(/\\/g, '/')}`;
-    
+    // Create local file URL
+    const imageUrl = `/api/uploads/images/${req.file.filename}`;
     project.image = imageUrl;
     await project.save();
 
@@ -282,8 +279,8 @@ export const deleteProjectImage = asyncHandler(
     }
 
     try {
-      const publicId = extractPublicId(project.image);
-      await deleteCloudinaryFile(publicId);
+      const filePath = extractFilePath(project.image);
+      await deleteLocalFile(filePath);
 
       project.image = undefined;
       await project.save();
