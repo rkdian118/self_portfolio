@@ -256,21 +256,28 @@ export const deleteCV = asyncHandler(
 );
 
 /**
- * @desc    Delete CV
- * @route   DELETE /api/hero/cv
- * @access  Private (Admin)
+ * @desc    Download CV
+ * @route   GET /api/hero/download-cv
+ * @access  Public
  */
 export const downloadCV = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
-    try {
-      const hero = await Hero.findOne({ isActive: true });
-      if (!hero || !hero.cvUrl) {
-        res.status(404).json({ success: false, message: "CV not found" });
-        return;
-      }
-      res.redirect(hero.cvUrl);
-    } catch (error) {
-      res.status(500).json({ success: false, message: "Error downloading CV" });
+    const hero = await Hero.findOne({ isActive: true });
+
+    if (!hero || !hero.cvUrl) {
+      res.status(404).json({
+        success: false,
+        message: "CV not found",
+      });
+      return;
     }
+
+    const filename = `${hero.name?.replace(/\s+/g, "_") + "CV" || "CV"}.pdf`;
+    const downloadUrl = hero.cvUrl.replace(
+      "/upload/",
+      `/upload/fl_attachment:${filename}/`
+    );
+
+    res.redirect(downloadUrl);
   }
 );

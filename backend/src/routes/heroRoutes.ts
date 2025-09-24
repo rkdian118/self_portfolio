@@ -8,7 +8,6 @@ import {
   deleteCV,
   downloadCV,
 } from "../controllers/heroController";
-import { Hero } from "../models/Hero";
 import { authenticate, authorizeAdmin } from "../middleware/authMiddleware";
 import {
   validateHero,
