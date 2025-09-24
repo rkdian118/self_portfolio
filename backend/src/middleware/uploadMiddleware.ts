@@ -85,8 +85,9 @@ if (isCloudinaryConfigured()) {
     cloudinary: cloudinary,
     params: {
       folder: "uploads/documents",
-      allowed_formats: ["pdf", "doc", "docx"],
-      resource_type: "raw",
+      allowed_formats: ["pdf"],
+      resource_type: "image",
+      format: "pdf",
     } as any,
   });
 } else {

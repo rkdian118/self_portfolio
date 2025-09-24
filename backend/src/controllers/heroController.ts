@@ -162,17 +162,15 @@ export const uploadCV = asyncHandler(
       }
     }
 
-    // Update with new CV URL - create downloadable link
-    const baseUrl = req.file.path;
-    const downloadUrl = baseUrl.replace("/upload/", "/upload/fl_attachment/");
-    hero.cvUrl = downloadUrl;
+    // Store the base Cloudinary URL
+    hero.cvUrl = req.file.path;
     await hero.save();
 
     res.status(200).json({
       success: true,
       message: "CV uploaded successfully",
       data: {
-        cvUrl: downloadUrl,
+        cvUrl: req.file.path,
         hero,
       },
     });
