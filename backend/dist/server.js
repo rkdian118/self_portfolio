@@ -21,9 +21,9 @@ const technologyRoutes_1 = __importDefault(require("./routes/technologyRoutes"))
 const errorMiddleware_1 = require("./middleware/errorMiddleware");
 const errorMiddleware_2 = require("./middleware/errorMiddleware");
 const requestLogger_1 = require("./middleware/requestLogger");
-dotenv_1.default.config();
+dotenv_1.default.config({ path: "../../.env" });
 const app = (0, express_1.default)();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.NODE_PORT || 5000;
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
 const limiter = (0, express_rate_limit_1.default)({
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || "60000"),
@@ -53,13 +53,13 @@ app.get("/health", (req, res) => {
         uptime: process.uptime(),
     });
 });
-app.use("/hero", heroRoutes_1.default);
-app.use("/projects", projectRoutes_1.default);
-app.use("/experience", experienceRoutes_1.default);
-app.use("/education", educationRoutes_1.default);
-app.use("/contact", contactRoutes_1.default);
-app.use("/auth", authRoutes_1.default);
-app.use("/technologies", technologyRoutes_1.default);
+app.use("/api/hero", heroRoutes_1.default);
+app.use("/api/projects", projectRoutes_1.default);
+app.use("/api/experience", experienceRoutes_1.default);
+app.use("/api/education", educationRoutes_1.default);
+app.use("/api/contact", contactRoutes_1.default);
+app.use("/api/auth", authRoutes_1.default);
+app.use("/api/technologies", technologyRoutes_1.default);
 app.use(errorMiddleware_2.notFound);
 app.use(errorMiddleware_1.errorHandler);
 const connectDB = async () => {
@@ -101,8 +101,6 @@ process.on("uncaughtException", (err) => {
     console.error("❌ Uncaught Exception:", err.message);
     process.exit(1);
 });
-if (require.main === module) {
-    startServer();
-}
+startServer();
 exports.default = app;
 //# sourceMappingURL=server.js.map

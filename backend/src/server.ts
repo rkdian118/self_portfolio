@@ -21,7 +21,7 @@ import { errorHandler } from "./middleware/errorMiddleware";
 import { notFound } from "./middleware/errorMiddleware";
 import { requestLogger } from "./middleware/requestLogger";
 
-dotenv.config();
+dotenv.config({ path: "../../.env" });
 
 const app = express();
 const PORT = process.env.NODE_PORT || 5000;
@@ -68,13 +68,13 @@ app.get("/health", (req: Request, res: Response) => {
 });
 
 // API routes
-app.use("/hero", heroRoutes);
-app.use("/projects", projectRoutes);
-app.use("/experience", experienceRoutes);
-app.use("/education", educationRoutes);
-app.use("/contact", contactRoutes);
-app.use("/auth", authRoutes);
-app.use("/technologies", technologyRoutes);
+app.use("/api/hero", heroRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/experience", experienceRoutes);
+app.use("/api/education", educationRoutes);
+app.use("/api/contact", contactRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/technologies", technologyRoutes);
 
 // Error handling middleware
 app.use(notFound);
@@ -128,8 +128,6 @@ process.on("uncaughtException", (err: Error) => {
   process.exit(1);
 });
 
-if (require.main === module) {
-  startServer();
-}
+startServer();
 
 export default app;
