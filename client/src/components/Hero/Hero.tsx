@@ -70,9 +70,11 @@ const Hero: React.FC = () => {
   };
 
   const handleDownloadCV = () => {
-    const apiUrl = process.env.REACT_APP_API_URL || '/api';
-    const downloadUrl = `${apiUrl}/hero/download-cv`;
-    window.open(downloadUrl, '_blank', 'noopener,noreferrer');
+    if (hero?.cvUrl) {
+      window.open(hero.cvUrl, "_blank", "noopener,noreferrer");
+    } else {
+      alert("CV not available at the moment");
+    }
   };
 
   // Show loading skeleton while fetching
