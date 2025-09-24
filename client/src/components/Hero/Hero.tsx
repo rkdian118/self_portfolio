@@ -73,7 +73,7 @@ const Hero: React.FC = () => {
     if (hero?.cvUrl) {
       const link = document.createElement("a");
       link.href = hero.cvUrl;
-      link.download = "Dhanraj-CV.pdf";
+      link.download = `${hero.name}-CV.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
