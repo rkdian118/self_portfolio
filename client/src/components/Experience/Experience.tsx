@@ -12,7 +12,7 @@ const Experience: React.FC = () => {
     if (!experiences || experiences.length === 0) {
       fetchExperiences({ limit: 20 });
     }
-  }, []);
+  }, [experiences, fetchExperiences]);
 
   const handleCompanyClick = (website: string) => {
     if (website) {

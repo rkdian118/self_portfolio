@@ -5,14 +5,12 @@ import Hero from "./components/Hero/Hero";
 import Technologies from "./components/Technologies/Technologies";
 import Projects from "./components/Projects/Projects";
 import Experience from "./components/Experience/Experience";
-import Contact from "./components/Contact/Contact";
 import AnimatedBackground from "./components/AnimatedBackground/AnimatedBackground";
 import Education from "./components/Education/Education";
-import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 import Footer from "./components/Footer/Footer";
 
 const App: React.FC = () => {
-  const { fetchAllData, loading } = usePortfolioStore();
+  const { fetchAllData } = usePortfolioStore();
 
   useEffect(() => {
     // Initialize data on app load

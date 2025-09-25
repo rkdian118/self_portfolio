@@ -11,7 +11,7 @@ const Education: React.FC = () => {
     if (!education || education.length === 0) {
       fetchEducation({ limit: 20 });
     }
-  }, []);
+  }, [education, fetchEducation]);
 
   // Show loading skeleton while fetching
   if (loading.education) {

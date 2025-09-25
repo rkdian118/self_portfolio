@@ -1,13 +1,10 @@
 import {
   ApiResponse,
-  ApiListResponse,
   ProjectsResponse,
   ExperiencesResponse,
   EducationResponse,
   Hero,
   Project,
-  Experience,
-  Education,
   Contact,
   ContactFormData,
   ContactFormResponse,
